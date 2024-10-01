@@ -19,7 +19,9 @@ app.listen(port , () => {
 
 
 const Adminroute = require('./Router/Adminroute')
+const Doctorroute = require('./Router/Doctorroute')
 
 
 
 app.use('/admin' , Adminroute) 
+app.use('/doctor' , Doctorroute)

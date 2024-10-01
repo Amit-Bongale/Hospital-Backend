@@ -1,4 +1,4 @@
-const mongoose = require(mongoose)
+const mongoose = require('mongoose')
 
 const Doctorinfoschema = mongoose.Schema(
     {
@@ -11,7 +11,7 @@ const Doctorinfoschema = mongoose.Schema(
         specialization : {type : String, required : true},
         phone : {type : String, required : true},
         experience : Number,
-        age : Number,
+        dob : Date,
 
     }
 )
