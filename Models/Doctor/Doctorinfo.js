@@ -15,6 +15,6 @@ const Doctorinfoschema = mongoose.Schema(
 
     }
 )
-const Doctorinfo = mongoose.model("Doctorinfo",Admininfoschema)
-module.exports = Admininfo;
+const Doctorinfo = mongoose.model("Doctorinfo",Doctorinfoschema)
+module.exports = Doctorinfo;
 
