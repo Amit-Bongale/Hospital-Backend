@@ -5,19 +5,19 @@ const Patientinfo = require('../Models/Doctor/Patientinfo')
 router.post('/createpatient', async (req, res)=>{
     try {
         const patient = await Patientinfo.create({
-        'id' : '',
-        'name' : {type : String, required : true},
-        'gender' : {type : String, required : true},
-        'email' : {type : String, required : true},
-        'password' : {type : String, required : true},
-        'dob' : Date,
-        'age' : {type : Number, required : true},
-        'phone' : {type : String, required : true},
-        'emergencycontact' : Number,
-        'address' : {type : String, required : true},
-        'bloodgroup' : {type : String, required : true},
-        'adharno' : {type : Number, required : true},
-        'medicalhistory' : String
+        'id' : 'P001',
+        'name' : 'pavan',
+        'gender' : 'Male',
+        'email' : 'ret@gmail.com',
+        'password' : 'pa123',
+        'dob' : 12-6-1947,
+        'age' : 77,
+        'phone' : 5432178969,
+        'emergencycontact' : 9876543219,
+        'address' : 'abc',
+        'bloodgroup' : 'B+ve',
+        'adharno' : 876908453,
+        'medicalhistory' : 'Skin Disease'
         
     });
     res.json(patient);
