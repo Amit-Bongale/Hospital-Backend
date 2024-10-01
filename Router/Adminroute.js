@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
+const Admininfo = require('../Models/Admin/Admininfo')
 
 router.post('/create' , async (req, res) => {
     try {
