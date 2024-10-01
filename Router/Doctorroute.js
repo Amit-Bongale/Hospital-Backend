@@ -4,21 +4,24 @@ const Doctorinfo = require('../Models/Doctor/Doctorinfo')
 
 router.post('/createdoctor', async (req, res)=>{
     try {
+
+        const { id, name, gender, email, password, specialization, phone, experience, dob } = req.body;
+
         const doctor = await Doctorinfo.create({
-            'id': 'D003',
-            'name': 'Rakshita',
-            'gender' : 'Female',
-            'email': 'abcd@gmail.com',
-            'password': 'a@123',
-            'specialization' : 'Cardiologist',
-            'phone': 1234567890,
-            'experience' : 1,
-            'dob': 5-10-2005,
+            'id': id,
+            'name': name,
+            'gender': gender,
+            'email': email,
+            'password': password,
+            'specialization': specialization,
+            'phone': phone,
+            'experience': experience,
+            'dob': new Date(dob),
         
-    });
-    res.json(doctor);
-    console.log('Inserted:', doctor);
-}
+        });
+        res.status(200).json({ message: 'Doctor inserted successfully', doctor });
+        console.log('Inserted:', doctor);
+    }
     catch (error) {
         console.error("Insertion Error:", error);
         res.status(500).json({ message: 'Error inserting doctor', error: error.message });
