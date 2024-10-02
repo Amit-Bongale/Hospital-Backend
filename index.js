@@ -22,6 +22,7 @@ const Adminroute = require('./Router/Adminroute')
 const Doctorroute = require('./Router/Doctorroute')
 const Patientroute = require('./Router/Patientroute')
 const Staffroute = require('./Router/Staffroute')
+const Managementroute = require('./Router/Managementroute')
 
 
 
@@ -29,3 +30,4 @@ app.use('/admin' , Adminroute)
 app.use('/doctor' , Doctorroute)
 app.use('/patient' , Patientroute)
 app.use('/staff' , Staffroute)
+app.use('/appointment' , Managementroute)
