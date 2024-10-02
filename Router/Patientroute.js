@@ -4,23 +4,26 @@ const Patientinfo = require('../Models/Patient/Patientinfo')
 
 router.post('/createpatient', async (req, res)=>{
     try {
+        const { id, name, gender, email, password, dob, age, phone, emergencycontact, address, bloodgroup, adharno, medicalhistory } = req.body;
+        console.log(req.body)
+
         const patient = await Patientinfo.create({
-        'id' : 'P001',
-        'name' : 'pavan',
-        'gender' : 'Male',
-        'email' : 'ret@gmail.com',
-        'password' : 'pa123',
-        'dob' : 12-6-1947,
-        'age' : 77,
-        'phone' : 5432178969,
-        'emergencycontact' : 9876543219,
-        'address' : 'abc',
-        'bloodgroup' : 'B+ve',
-        'adharno' : 876908453,
-        'medicalhistory' : 'Skin Disease'
+        'id' : id,
+        'name' : name,
+        'gender' : gender,
+        'email' : email,
+        'password' : password,
+        'dob' : dob,
+        'age' : age,
+        'phone' : phone,
+        'emergencycontact' : emergencycontact,
+        'address' : address,
+        'bloodgroup' : bloodgroup,
+        'adharno' : adharno,
+        'medicalhistory' : medicalhistory
         
     });
-    res.json(patient);
+    res.status(200).json({ message: 'Patient inserted successfully', patient });
     console.log('Inserted:', patient);
 }
     catch (error) {
