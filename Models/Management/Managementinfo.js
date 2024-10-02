@@ -6,9 +6,9 @@ const Appointmentinfoschema = mongoose.Schema(
        doctorname : {type : String , required : true},
        patientid : {type : String , required : true},
        scheduleddate : {type : Date , required : true}, 
-       Scheduledtime : {type : String , required : true},
-       Status : {type : String , required : true},
-       Consultantfee : {type : Number , required : true}
+       scheduledtime : {type : String , required : true},
+       status : {type : String , required : true},
+       consultantfee : {type : Number , required : true}
     }
 )
 

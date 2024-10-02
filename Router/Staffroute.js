@@ -1,25 +1,29 @@
 const express = require('express')
 const router = express.Router()
-const Appointmentinfo = require('../Models/Management/Managementinfo')
+const Staffinfo = require('../Models/Staff/Staffinfo')
 
-router.post('/createappointment', async (req, res)=>{
+router.post('/createstaff', async (req, res)=>{
     try {
-        const appointment = await Appointmentinfo.create({
-        'doctorid' : 'D003',
-        'doctorname' : 'Danesh',
-        'patientid' : 'P009',
-        'scheduleddate' : 23-9-2024, 
-        'Scheduledtime' : '12:3:54',
-        'Status' : 'Accept',
-        'Consultantfee' : 500
+        const { id, name, gender, dob, age, email, phone, password} = req.body;
+        console.log(req.body)
+
+        const staff = await Staffinfo.create({
+        'id' : id,
+        'name' : name,
+        'gender' : gender,
+        'dob' : dob,
+        'age' : age,
+        'email' : email,
+        'phone' : phone,
+        'password' : password
         
     });
-    res.json(appointment);
-    console.log('Inserted:', appointment);
+    res.status(200).json({ message: 'Staff inserted successfully', staff });
+    console.log('Inserted:', staff);
 }
     catch (error) {
         console.error("Insertion Error:", error);
-        res.status(500).json({ message: 'Error inserting patient appointment details', error: error.message });
+        res.status(500).json({ message: 'Error inserting staff', error: error.message });
         
     }
 })
