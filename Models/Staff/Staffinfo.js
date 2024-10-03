@@ -2,17 +2,19 @@ const mongoose = require('mongoose')
 
 const Staffinfoschema = mongoose.Schema(
     {
-        id : {type : String, required : true},
+        id : {type : String, required : true , unique: true},
         name : {type : String, required : true},
         gender : {type : String, required : true},
+        email : {type : String, required : true , unique: true},
+        phone : {type : Number, required : true , unique: true},
+        role : {type : String , required : true},
+        experience : Number,
         dob : {type : Date, required : true},
-        age : Number,
-        email : {type : String, required : true},
-        phone : {type : Number, required : true},
         password : {type : String, required : true},
-
     }
 )
+
+// StaffInfoSchema.index({ email: 1 }, { unique: true });
 
 const Staffinfo = mongoose.model("Staffinfo",Staffinfoschema)
 module.exports = Staffinfo
