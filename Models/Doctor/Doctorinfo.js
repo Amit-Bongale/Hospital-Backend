@@ -12,6 +12,7 @@ const Doctorinfoschema = mongoose.Schema(
         experience : Number,
         dob : Date,
         image : String,
+        status : Boolean 
     }
 )
 const Doctorinfo = mongoose.model("Doctorinfo",Doctorinfoschema)
