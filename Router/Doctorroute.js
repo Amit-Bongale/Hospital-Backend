@@ -126,4 +126,18 @@ router.post('/deletedoctor', async (req, res) => {
 });
 
 
+// find Total number of doctors and active doctors
+router.get('/doctorstats', async (req, res) => {
+  try {
+    const totalDoctors = await Doctorinfo.countDocuments({});
+    const activeDoctors = await Doctorinfo.countDocuments({ 'status': true });
+
+    res.status(200).json({ totalDoctors, activeDoctors });
+  } catch (error) {
+    console.error("Error fetching doctor statistics:", error);
+    res.status(500).json({ message: 'Error fetching doctor statistics', error: error.message });
+  }
+});
+
+
 module.exports = router

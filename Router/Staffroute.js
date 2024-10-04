@@ -18,7 +18,8 @@ router.post('/createstaff', async (req, res)=>{
           'phone' : phone,
           'role' : role,
           'experience' : experience,
-          'password' : password
+          'password' : password,
+          'status' : false
         });
 
         res.status(200).json({ message: 'Staff inserted successfully', staff });
@@ -119,6 +120,21 @@ router.post('/deletestaff', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Error deleting staff", error: error.message });
     console.log(error.message);
+  }
+});
+
+
+// find Total number of staff and active staff
+router.get('/staffstats', async (req, res) => {
+  try {
+    const totalstaff = await Staffinfo.countDocuments({});
+    const activestaff = await Staffinfo.countDocuments({ 'status': true });
+
+    res.status(200).json({ totalstaff, activestaff });
+    // console.log(totalstaff , activestaff)
+  } catch (error) {
+    console.error("Error fetching Staff statistics:", error);
+    res.status(500).json({ message: 'Error fetching Staff statistics', error: error.message });
   }
 });
 
