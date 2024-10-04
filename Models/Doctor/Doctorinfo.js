@@ -11,6 +11,7 @@ const Doctorinfoschema = mongoose.Schema(
         phone : { type : String, required : true , unique: true },
         experience : Number,
         dob : Date,
+        image : String,
     }
 )
 const Doctorinfo = mongoose.model("Doctorinfo",Doctorinfoschema)
