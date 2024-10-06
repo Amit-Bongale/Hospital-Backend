@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const Appointmentinfoschema = mongoose.Schema(
+const Appointmentschema = mongoose.Schema(
     {
        doctorid : {type : String , required : true},
        doctorname : {type : String , required : true},
@@ -12,5 +12,5 @@ const Appointmentinfoschema = mongoose.Schema(
     }
 )
 
-const Appointmentinfo = mongoose.model("Appointmentinfo", Appointmentinfoschema)
-module.exports = Appointmentinfo;
+const Appointment = mongoose.model("Appointmentinfo", Appointmentschema)
+module.exports = Appointment;
