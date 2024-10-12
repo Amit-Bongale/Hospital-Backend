@@ -2,20 +2,19 @@ const express = require('express')
 const router = express.Router()
 const Patientinfo = require('../Models/Patient/Patientinfo')
 
-router.post('/createpatient', async (req, res)=>{
+router.post('/createnewpatient', async (req, res)=>{
     try {
-        const { id, name, gender, email, password, dob, age, phone, emergencycontact, address, bloodgroup, adharno, medicalhistory } = req.body;
+        const { id, name, gender, email, phone, dob, age, address, emergencycontact,  bloodgroup, adharno, medicalhistory } = req.body;
         console.log(req.body)
 
         const patient = await Patientinfo.create({
         'id' : id,
         'name' : name,
         'gender' : gender,
+        'phone' : phone,
         'email' : email,
-        'password' : password,
         'dob' : dob,
         'age' : age,
-        'phone' : phone,
         'emergencycontact' : emergencycontact,
         'address' : address,
         'bloodgroup' : bloodgroup,
@@ -90,7 +89,7 @@ router.post('/updatepatient/:id', async (req, res) => {
       }
   
       // Return the updated patient
-      res.status(200).json({message: 'Details Updated Sucessfully' ,updatedpatient});
+      res.status(200).json({message: 'Details Updated Sucessfully' , updatedpatient});
       console.log(updatedpatient)
   
     } catch (error) {
