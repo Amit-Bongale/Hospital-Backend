@@ -2,12 +2,19 @@ const express = require('express')
 const router = express.Router()
 const Doctorinfo = require('../Models/Doctor/Doctorinfo')
 
+const uploadImage = require('../Config/Cloudinaryconfig')
+const upload = require('../Config/Multer')
+
 // insert doctors
-router.post('/createdoctor', async (req, res)=>{
+router.post('/createdoctor',  upload.single('image'), async (req, res)=>{
     
   try {
-    const { id, name, gender, email, password, specialization, phone, experience, dob , image} = req.body;
+    const { id, name, gender, email, password, specialization, phone, experience, dob} = req.body;
     console.log(req.body)
+    console.log(req.file);
+
+    const imagePath = req.file.path;
+    const uploadedImageUrl = await uploadImage(imagePath);
 
     const doctor = await Doctorinfo.create({
       'id': id,
@@ -19,8 +26,8 @@ router.post('/createdoctor', async (req, res)=>{
       'phone': phone,
       'experience': experience,
       'dob': new Date(dob),
-      'image': image,
-      'status' : false
+      'image': uploadedImageUrl,
+      'status' : false,
     });
 
     res.status(200).json({ message: 'Doctor inserted successfully', doctor });
@@ -31,6 +38,7 @@ router.post('/createdoctor', async (req, res)=>{
     }
 
   }
+
   catch (error) {
     console.error("Insertion Error:", error);
     res.status(500).json({ message: 'Error inserting doctor', error: error.message });

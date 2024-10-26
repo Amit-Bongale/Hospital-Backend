@@ -5,35 +5,35 @@ const Staffinfo = require('../Models/Staff/Staffinfo')
 
 // add staff
 router.post('/createstaff', async (req, res)=>{
-    try {
-        const { id, name, gender, email, phone, role, experience, dob, password } = req.body;
-        console.log(req.body)
+  try {
+    const { id, name, gender, email, phone, role, experience, dob, password } = req.body;
+    console.log(req.body)
 
-        const staff = await Staffinfo.create({
-          'id' : id,
-          'name' : name,
-          'gender' : gender,
-          'dob' : dob,
-          'email' : email,
-          'phone' : phone,
-          'role' : role,
-          'experience' : experience,
-          'password' : password,
-          'status' : false
-        });
+    const staff = await Staffinfo.create({
+      'id' : id,
+      'name' : name,
+      'gender' : gender,
+      'dob' : dob,
+      'email' : email,
+      'phone' : phone,
+      'role' : role,
+      'experience' : experience,
+      'password' : password,
+      'status' : false
+    });
 
-        res.status(200).json({ message: 'Staff inserted successfully', staff });
-        // console.log('Inserted:', staff);
+    res.status(200).json({ message: 'Staff inserted successfully', staff });
+    // console.log('Inserted:', staff);
 
-        if (!staff){
-          res.status(400).json({ message: 'Staff not inserted' });
-        }
-        
-    } catch (error) {
-        console.error("Insertion Error:", error);
-        res.status(500).json({ message: 'Error inserting staff', error: error.message });
-        console.log(error)
+    if (!staff){
+      res.status(400).json({ message: 'Staff not inserted' });
     }
+      
+  } catch (error) {
+    console.error("Insertion Error:", error);
+    res.status(500).json({ message: 'Error inserting staff', error: error.message });
+    console.log(error)
+  }
 })
 
 

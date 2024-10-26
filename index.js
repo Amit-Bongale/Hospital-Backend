@@ -24,6 +24,7 @@ const Patientroute = require('./Router/Patientroute')
 const Staffroute = require('./Router/Staffroute')
 const Appointment = require('./Router/Appointmentrote')
 const salaryroute = require('./Router/Salaryroute')
+const Testroute = require('./Router/Testroute')
 
 
 app.use('/admin' , Adminroute) 
@@ -32,3 +33,4 @@ app.use('/patient' , Patientroute)
 app.use('/staff' , Staffroute)
 app.use('/appointment' , Appointment)
 app.use('/salary' , salaryroute)
+app.use('/test', Testroute)

@@ -4,32 +4,32 @@ const Patientinfo = require('../Models/Patient/Patientinfo')
 
 router.post('/createnewpatient', async (req, res)=>{
     try {
-        const { id, name, gender, email, phone, dob, age, address, emergencycontact,  bloodgroup, adharno, medicalhistory } = req.body;
-        console.log(req.body)
+      const { id, name, gender, email, phone, dob, age, address, emergencycontact,  bloodgroup, adharno, medicalhistory } = req.body;
+      
+      console.log(req.body)
 
-        const patient = await Patientinfo.create({
-        'id' : id,
-        'name' : name,
-        'gender' : gender,
-        'phone' : phone,
-        'email' : email,
-        'dob' : dob,
-        'age' : age,
-        'emergencycontact' : emergencycontact,
-        'address' : address,
-        'bloodgroup' : bloodgroup,
-        'adharno' : adharno,
-        'medicalhistory' : medicalhistory
+      const patient = await Patientinfo.create({
+      'id' : id,
+      'name' : name,
+      'gender' : gender,
+      'phone' : phone,
+      'email' : email,
+      'dob' : dob,
+      'age' : age,
+      'emergencycontact' : emergencycontact,
+      'address' : address,
+      'bloodgroup' : bloodgroup,
+      'adharno' : adharno,
+      'medicalhistory' : medicalhistory
         
     });
     res.status(200).json({ message: 'Patient inserted successfully', patient });
     console.log('Inserted:', patient);
-}
-    catch (error) {
-        console.error("Insertion Error:", error);
-        res.status(500).json({ message: 'Error inserting patient', error: error.message });
-        
-    }
+  }
+  catch (error) {
+    console.error("Insertion Error:", error);
+    res.status(500).json({ message: 'Error inserting patient', error: error.message });  
+  }
 })
 
 
