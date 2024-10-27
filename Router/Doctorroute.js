@@ -2,19 +2,13 @@ const express = require('express')
 const router = express.Router()
 const Doctorinfo = require('../Models/Doctor/Doctorinfo')
 
-const uploadImage = require('../Config/Cloudinaryconfig')
-const upload = require('../Config/Multer')
 
 // insert doctors
-router.post('/createdoctor',  upload.single('image'), async (req, res)=>{
+router.post('/createdoctor', async (req, res)=>{
     
   try {
-    const { id, name, gender, email, password, specialization, phone, experience, dob} = req.body;
-    console.log(req.body)
-    console.log(req.file);
-
-    const imagePath = req.file.path;
-    const uploadedImageUrl = await uploadImage(imagePath);
+    const { id, name, gender, email, password, specialization, phone, experience, dob , image} = req.body;
+    console.log( "body:", req.body)
 
     const doctor = await Doctorinfo.create({
       'id': id,
@@ -26,7 +20,7 @@ router.post('/createdoctor',  upload.single('image'), async (req, res)=>{
       'phone': phone,
       'experience': experience,
       'dob': new Date(dob),
-      'image': uploadedImageUrl,
+      'image': image,
       'status' : false,
     });
 
