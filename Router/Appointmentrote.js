@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Appointment = require('../Models/Management/Appointment')
+const Appointment = require('../Models/Appointment')
 
 router.post('/createappointment', async (req, res)=>{
     try {

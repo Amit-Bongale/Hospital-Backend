@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Staffinfo = require('../Models/Staff/Staffinfo')
+const Staffinfo = require('../Models/Staffinfo')
 
 
 // add staff

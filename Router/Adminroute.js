@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const Admininfo = require('../Models/Admin/Admininfo')
+const Admininfo = require('../Models/Admininfo')
 
 router.post('/create' , async (req, res) => {
     try {

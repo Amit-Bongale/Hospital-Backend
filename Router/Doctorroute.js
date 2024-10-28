@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Doctorinfo = require('../Models/Doctor/Doctorinfo')
+const Doctorinfo = require('../Models/Doctorinfo')
 
 
 // insert doctors
