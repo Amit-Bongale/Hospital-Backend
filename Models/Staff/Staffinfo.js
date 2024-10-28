@@ -11,6 +11,7 @@ const Staffinfoschema = mongoose.Schema(
         experience : Number,
         dob : {type : Date, required : true},
         password : {type : String, required : true},
+        image : String,
         status : Boolean,
     }
 )

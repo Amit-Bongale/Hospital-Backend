@@ -21,7 +21,6 @@ router.post('/createnewpatient', async (req, res)=>{
       'bloodgroup' : bloodgroup,
       'adharno' : adharno,
       'medicalhistory' : medicalhistory
-        
     });
     res.status(200).json({ message: 'Patient inserted successfully', patient });
     console.log('Inserted:', patient);

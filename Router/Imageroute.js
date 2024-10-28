@@ -14,16 +14,13 @@ router.post('/upload' , async (req,res) => {
 
     const { id , image } = req.body
     console.log(req.body)
-
+    
     // Check if the file is uploaded correctly
     if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded' });
     }
 
     const uploadedImageUrl = await uploadImage(image);
-
-
- 
 
     try {
         const img = Image.create({

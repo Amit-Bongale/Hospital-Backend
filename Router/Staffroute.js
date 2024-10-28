@@ -6,7 +6,7 @@ const Staffinfo = require('../Models/Staff/Staffinfo')
 // add staff
 router.post('/createstaff', async (req, res)=>{
   try {
-    const { id, name, gender, email, phone, role, experience, dob, password } = req.body;
+    const { id, name, gender, email, phone, role, experience, dob, password , image } = req.body;
     console.log(req.body)
 
     const staff = await Staffinfo.create({
@@ -19,6 +19,7 @@ router.post('/createstaff', async (req, res)=>{
       'role' : role,
       'experience' : experience,
       'password' : password,
+      'image' : image,
       'status' : false
     });
 
