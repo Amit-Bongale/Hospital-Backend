@@ -45,14 +45,14 @@ router.post('/createdoctor', async (req, res)=>{
 
 // get all docotrs
 router.post('/alldoctors', async (req, res) => {
-    try {
-      const doctors = await Doctorinfo.find(); // Fetch all doctors from the collection
-      res.status(200).json(doctors); // Return all doctors in JSON format
-      // console.log(doctors)
-    } catch (error) {
-      console.error("Error fetching doctors:", error);
-      res.status(500).json({ message: 'Error fetching doctors', error: error.message });
-    }
+  try {
+    const doctors = await Doctorinfo.find(); // Fetch all doctors from the collection
+    res.status(200).json(doctors); // Return all doctors in JSON format
+    console.log(doctors)
+  } catch (error) {
+    console.error("Error fetching doctors:", error);
+    res.status(500).json({ message: 'Error fetching doctors', error: error.message });
+  }
 });
 
 

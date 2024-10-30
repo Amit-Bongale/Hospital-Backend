@@ -6,7 +6,7 @@ const Patientinfoschema = mongoose.Schema(
         id : {type : String, required : true},
         name : {type : String, required : true},
         gender : {type : String, required : true},
-        email : {type : String, required : true},
+        email : {type : String},
         password : {type : String},
         dob : Date,
         age : {type : Number, required : true},

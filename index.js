@@ -25,6 +25,7 @@ const Staffroute = require('./Router/Staffroute')
 const Appointment = require('./Router/Appointmentrote')
 const salaryroute = require('./Router/Salaryroute')
 const Testroute = require('./Router/Testroute')
+const Queueroute = require('./Router/Queueroute')
 
 const Imageroute = require('./Router/Imageroute')
 
@@ -36,5 +37,6 @@ app.use('/staff' , Staffroute)
 app.use('/appointment' , Appointment)
 app.use('/salary' , salaryroute)
 app.use('/test', Testroute)
+app.use('/queue', Queueroute)
 
 app.use('/image', Imageroute)
