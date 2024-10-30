@@ -14,8 +14,8 @@ const Patientinfoschema = mongoose.Schema(
         emergencycontact : Number,
         address : {type : String, required : true},
         bloodgroup : {type : String, required : true},
-        adharno : {type : Number, required : true},
-        medicalhistory : String
+        aadharno : {type : Number, required : true},
+        medicalhistory : String,
     }
 )
 const Patientinfo = mongoose.model("Patientinfo",Patientinfoschema)

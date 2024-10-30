@@ -34,6 +34,6 @@ router.post('/allpatient', async (req, res) => {
       console.error("Error fetching doctors:", error);
       res.status(500).json({ message: 'Error fetching doctors', error: error.message });
     }
-  });
+});
 
 module.exports = router
