@@ -47,7 +47,7 @@ router.post('/allpatients', async (req, res) => {
 
 
 // Find details of a single patient
-router.get('/findpatient/:id', async (req, res) => {
+router.post('/findpatient/:id', async (req, res) => {
     const { id } = req.params;
     console.log(id)
     
@@ -60,7 +60,8 @@ router.get('/findpatient/:id', async (req, res) => {
         return res.status(404).json({ message: `patient not found ${id}` });
       }
   
-      res.status(200).json(patient);
+      // res.status(200).json(patient);
+      res.send(patient)
       // console.log(patient)
     } catch (error) {
       console.error('Error fetching patient:', error);
