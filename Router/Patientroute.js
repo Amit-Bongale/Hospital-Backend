@@ -177,7 +177,7 @@ router.post('/login', async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: false, message: 'Account Does not Exist' });
     }
-
+    console.log(user)
     // Check if the password matches
     if (user.password !== password) {
       return res.status(401).json({ success: false, message: 'Invalid password' });
