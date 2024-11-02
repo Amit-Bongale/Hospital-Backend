@@ -45,4 +45,26 @@ router.post('/details/:patientId', async (req, res) => {
     }
 });
 
+
+// DELETE route to Cancel a Appointment by Id
+router.post('/cancelappointment', async (req, res) => {
+
+    try {
+      const {id} = req.body;
+      console.log(id)
+  
+      const appointment = await Appointment.findOneAndDelete({ '_id' : id});
+  
+      if (!appointment) {
+        return res.status(404).json({ message: "Appointment not found" });
+      }
+  
+      res.status(200).json({ message: "Appointment Canceled Successfully" });
+  
+    } catch (error) {
+      res.status(500).json({ message: "Error Cancelling Appointment", error: error.message });
+      console.log(error.message);
+    }
+});
+
 module.exports = router
