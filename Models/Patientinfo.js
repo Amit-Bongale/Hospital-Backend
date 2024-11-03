@@ -18,6 +18,6 @@ const Patientinfoschema = mongoose.Schema(
         medicalhistory : String,
     }
 )
-const Patientinfo = mongoose.model("Patientinfo",Patientinfoschema)
+const Patientinfo = mongoose.model("Patient",Patientinfoschema)
 module.exports = Patientinfo;
 

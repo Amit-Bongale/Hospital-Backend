@@ -1,10 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+
 const env = require('dotenv');
 env.config()
+
 const port = 3000 || process.env.PORT
+
 const app = express()
+
 app.use(cors());
 app.use(express.json());
 
@@ -18,16 +22,15 @@ app.listen(port , () => {
 
 
 
-const Adminroute = require('./Router/Adminroute')
-const Doctorroute = require('./Router/Doctorroute')
-const Patientroute = require('./Router/Patientroute')
-const Staffroute = require('./Router/Staffroute')
-const Appointment = require('./Router/Appointmentrote')
-const salaryroute = require('./Router/Salaryroute')
-const Testroute = require('./Router/Testroute')
-const Queueroute = require('./Router/Queueroute')
-
-const Imageroute = require('./Router/Imageroute')
+const Adminroute = require('./Router/AdminRoute')
+const Doctorroute = require('./Router/DoctorRoute')
+const Patientroute = require('./Router/PatientRoute')
+const Staffroute = require('./Router/StaffRoute')
+const Appointment = require('./Router/AppointmentRoute')
+const salaryroute = require('./Router/SalaryRoute')
+const Testroute = require('./Router/TestRoute')
+const Queueroute = require('./Router/QueueRoute')
+const Contactusroute = require('./Router/ContactusRoute')
 
 
 app.use('/admin' , Adminroute) 
@@ -38,5 +41,4 @@ app.use('/appointment' , Appointment)
 app.use('/salary' , salaryroute)
 app.use('/test', Testroute)
 app.use('/queue', Queueroute)
-
-app.use('/image', Imageroute)
+app.use('/contactus' , Contactusroute)

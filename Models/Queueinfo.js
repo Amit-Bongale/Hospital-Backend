@@ -5,6 +5,7 @@ const QueueSchema = new mongoose.Schema({
     name : {type : String , required: true},
     gender : {type : String , required: true},
     disease : {type : String , required: true},
+    type : {type : String},
     mobileno : {type : String , required: true},
     status : {type: String}
 })

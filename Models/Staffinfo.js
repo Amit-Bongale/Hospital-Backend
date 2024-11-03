@@ -18,5 +18,5 @@ const Staffinfoschema = mongoose.Schema(
 
 // StaffInfoSchema.index({ email: 1 }, { unique: true });
 
-const Staffinfo = mongoose.model("Staffinfo",Staffinfoschema)
+const Staffinfo = mongoose.model("Staff",Staffinfoschema)
 module.exports = Staffinfo

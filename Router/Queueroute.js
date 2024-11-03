@@ -5,13 +5,14 @@ const Queue = require('../Models/Queueinfo')
 router.post("/createqueue" , async (req, res) => {
 
     try {
-        const {id , name , gender , disease , mobileno , status, } = req.body;
+        const {id , name , gender , disease , type,  mobileno , status, } = req.body;
 
         const queue = await Queue.create({
             'id' : id,
             'name' : name,
             'gender' : gender,
             'disease' : disease,
+            'type': type, 
             'mobileno' : mobileno,
             'status' : status,
         })

@@ -15,6 +15,6 @@ const Doctorinfoschema = mongoose.Schema(
         status : Boolean 
     }
 )
-const Doctorinfo = mongoose.model("Doctorinfo",Doctorinfoschema)
+const Doctorinfo = mongoose.model("Doctor",Doctorinfoschema)
 module.exports = Doctorinfo;
 
