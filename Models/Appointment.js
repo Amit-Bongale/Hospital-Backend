@@ -9,9 +9,10 @@ const Appointmentschema = mongoose.Schema(
       scheduleddate : {type : Date , required : true}, 
       scheduledtime : {type : String , required : true},
       type : {type : String},
-    //    type : [pending, upcomming, cancelled , completed, ]
+      // appointment type : [ Consultation, Follow up, Emergency]
       disease : {type : String },
       status : {type : String , required : true , default : "Pending"},
+      //    status : [pending, upcomming, cancelled , completed,]
       consultantfee : {type : Number , required : true}
    }
 )
