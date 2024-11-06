@@ -17,4 +17,3 @@ const Doctorinfoschema = mongoose.Schema(
 )
 const Doctorinfo = mongoose.model("Doctor",Doctorinfoschema)
 module.exports = Doctorinfo;
-

@@ -30,7 +30,7 @@ router.post('/allpatient', async (req, res) => {
     try {
       const queue = await Queue.find(); // Fetch all doctors from the collection
       res.status(200).json(queue); // Return all doctors in JSON format
-      console.log(queue)
+    //   console.log(queue)
     } catch (error) {
       console.error("Error fetching doctors:", error);
       res.status(500).json({ message: 'Error fetching doctors', error: error.message });
