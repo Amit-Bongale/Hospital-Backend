@@ -23,4 +23,17 @@ router.post("/create" , async (req, res) => {
     }
 })
 
+router.post('/testdetails', async (req, res) => {
+    try {
+      const test = await Test.find(); // Fetch test details from the collection
+      res.status(200).json(test);
+      // console.log(patient)
+    } catch (error) {
+      console.error("Error fetching test details:", error);
+      res.status(500).json({ message: 'Error fetching test details', error: error.message });
+    }
+  });
+
+
+
 module.exports = router

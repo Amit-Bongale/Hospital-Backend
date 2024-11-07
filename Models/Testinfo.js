@@ -7,6 +7,7 @@ const TestSchema = new mongoose.Schema({
     testname : {type: String , required: true},
     result : {type: String},
     status : {type: String},
+    date : {type: Date, default: Date.now}
 })
 
 const Test = mongoose.model('Test', TestSchema)

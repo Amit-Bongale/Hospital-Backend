@@ -114,7 +114,7 @@ router.post('/findpatient/:id', async (req, res) => {
   
       // res.status(200).json(patient);
       res.send(patient)
-      // console.log(patient)
+      console.log(patient)
     } catch (error) {
       console.error('Error fetching patient:', error);
       res.status(500).json({ message: 'Error fetching patient', error: error.message });
