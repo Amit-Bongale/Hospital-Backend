@@ -7,8 +7,7 @@ router.post('/request' , (req,res) => {
 
     try {
         const {name,email,message} = req.body
-        console.log(req.body)
-
+        
         const contact = Contactus.create({
             'name':name,
             'email':email,
@@ -25,9 +24,10 @@ router.post('/request' , (req,res) => {
 
 
 // get all contact requests
-router.post('/allrequest', (req, res) => {
+router.post('/allrequest',async (req, res) => {
     try {
-        const contact = Contactus.find()
+        const contact = await Contactus.find().sort({ 'date' : -1 });
+        console.log(contact)
         res.status(200).json(contact)
     } catch (error) {
         console.error("Fetching Error:", error);
