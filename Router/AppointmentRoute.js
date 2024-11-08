@@ -48,7 +48,7 @@ router.post('/details/:patientId', async (req, res) => {
   const { patientId } = req.params;
 
   try {
-    const appointments = await Appointment.find({'patientid' : patientId }).sort({ scheduleddate : -1 });;
+    const appointments = await Appointment.find({'patientid' : patientId }).sort({ scheduleddate : -1 });
     if (!appointments.length) {
       return res.status(404).json({ success: false , message: 'No appointments found for this patient' });
     }
