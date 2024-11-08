@@ -28,7 +28,7 @@ const Patientroute = require('./Router/PatientRoute')
 const Staffroute = require('./Router/StaffRoute')
 const Appointment = require('./Router/AppointmentRoute')
 const salaryroute = require('./Router/SalaryRoute')
-const Testroute = require('./Router/TestRoute')
+const Testroute = require('./Router/Testroute')
 const Queueroute = require('./Router/QueueRoute')
 const Contactusroute = require('./Router/ContactusRoute')
 
