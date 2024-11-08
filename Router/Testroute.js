@@ -5,11 +5,12 @@ const Test = require('../Models/Testinfo')
 router.post("/create" , async (req, res) => {
 
     try {
-        const {patientid , doctorid , staffid , testname , result , status, } = req.body;
+        const {patientid , patientname , doctorid , staffid , testname , result , status, } = req.body;
 
         const test = await Test.create({
             'staffid' : staffid,
             'patientid' : patientid,
+            'patientname' : patientname,
             'doctorid' : doctorid,
             'testname' : testname,
             'result' : result,
@@ -22,6 +23,8 @@ router.post("/create" , async (req, res) => {
         res.status(500).json({ message: 'Error inserting test', error: error.message });
     }
 })
+
+
 
 router.post('/testdetails', async (req, res) => {
     try {

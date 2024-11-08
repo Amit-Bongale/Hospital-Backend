@@ -57,7 +57,7 @@ router.post('/alldoctors', async (req, res) => {
 
 
 // Find a single docotr
-router.get('/finddoctor/:id', async (req, res) => {
+router.post('/finddoctor/:id', async (req, res) => {
   const { id } = req.params;
   console.log(id)
   
