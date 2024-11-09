@@ -31,6 +31,7 @@ const salaryroute = require('./Router/SalaryRoute')
 const Testroute = require('./Router/Testroute')
 const Queueroute = require('./Router/QueueRoute')
 const Contactusroute = require('./Router/ContactusRoute')
+const Admissionroute = require('./Router/AdmissionRoute')
 
 
 app.use('/admin' , Adminroute) 
@@ -42,3 +43,4 @@ app.use('/salary' , salaryroute)
 app.use('/test', Testroute)
 app.use('/queue', Queueroute)
 app.use('/contactus' , Contactusroute)
+app.use('/admission' , Admissionroute)
