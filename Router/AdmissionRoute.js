@@ -95,5 +95,25 @@ router.post('/updateadmission/:id', async (req, res) => {
     }
   });
 
+  
+// DELETE route to delete a test by ObjectId
+router.post('/deleteadmission', async (req, res) => {
+  try {
+    const {id} = req.body; // Assuming the _id is sent as a URL parameter
+    console.log(id)
+    // Deleting a admission by ObjectId
+    const admit = await Admission.findOneAndDelete({ 'id' : id});
+
+    if (!admit) {
+      return res.status(404).json({ message: "admission not found" });
+    }
+
+    res.status(200).json({ message: "Admission deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting admission", error: error.message });
+    console.log(error.message);
+  }
+});
+
 
 module.exports = router
