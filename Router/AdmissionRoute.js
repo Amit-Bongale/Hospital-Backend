@@ -75,7 +75,7 @@ router.post('/updateadmission/:id', async (req, res) => {
   try {
     // Find the patient by id and update with new data
     const updatedadmission = await Admission.findOneAndUpdate(
-      { _id: id },  // Find patient by id
+      { patientid: id },  // Find patient by id
       { $set: updateData },  // Update the patient's details with the new data
       { new: true } // Return the updated document
     );
