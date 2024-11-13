@@ -1,4 +1,4 @@
-    const mongoose = require('mongoose')
+const mongoose = require('mongoose')
 
 const QueueSchema = new mongoose.Schema({
     id : {type : String , required: true},
@@ -7,7 +7,9 @@ const QueueSchema = new mongoose.Schema({
     disease : {type : String , required: true},
     type : {type : String},
     mobileno : {type : String , required: true},
-    status : {type: String}
+    status : {type: String},
+    doctorid : {type : String},
+    date : {type: Date ,  default: Date.now}
 })
 
 const Queue = mongoose.model('Queue', QueueSchema)

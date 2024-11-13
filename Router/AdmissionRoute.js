@@ -4,29 +4,29 @@ const Admission = require('../Models/Admissioninfo')
 
 router.post("/createadmission" , async (req, res) => {
 
-    try {
-        const {patientid , patientname , doctorid , staffid , wardno , wardtype , bedno ,  admissiondateandtime , dischargedateandtime , reason } = req.body;
+  try {
+    const {patientid , patientname , doctorid , staffid , wardno , wardtype , bedno ,  admissiondateandtime , dischargedateandtime , reason } = req.body;
 
-        const admission = await Admission.create({
-            'patientid' : patientid,
-            'patientname' : patientname,
-            'doctorid' : doctorid,
-            'staffid' : staffid,
-            'wardno' : wardno,
-            'wardtype' : wardtype,
-            'bedno' : bedno,
-            'admissiondateandtime' : admissiondateandtime,
-            'dischargedateandtime' : dischargedateandtime,
-            'reason' : reason,
+    const admission = await Admission.create({
+      'patientid' : patientid,
+      'patientname' : patientname,
+      'doctorid' : doctorid,
+      'staffid' : staffid,
+      'wardno' : wardno,
+      'wardtype' : wardtype,
+      'bedno' : bedno,
+      'admissiondateandtime' : admissiondateandtime,
+      'dischargedateandtime' : dischargedateandtime,
+      'reason' : reason,
 
-        })
+    })
 
-        res.status(200).json({message : 'Admission details Added' , admission})
-        
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({ message: 'Error inserting admission details', error: error.message });
-    }
+    res.status(200).json({message : 'Admission details Added' , admission})
+      
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Error inserting admission details', error: error.message });
+  }
 })
 
 
