@@ -2,7 +2,8 @@ const express = require('express')
 const router = express.Router()
 const Patient = require('../Models/Patientinfo')
 
-const { sendWelcomeMessage } = require('../Twilio/Messager')
+const { sendWelcomeMessage } = require('../Utility/Messager')
+const {sendWelcomeEmail} = require('../Utility/Sendmail')
 
 
 // create new Patient (for staff create new Patient)
@@ -34,7 +35,10 @@ router.post('/createnewpatient', async (req, res)=>{
       'password' : password,
     });
 
+    await sendWelcomeEmail(email, name, id, password);
+    
     await sendWelcomeMessage(name, phone, id, password);
+
 
     res.status(200).json({ message: 'Patient inserted successfully', patient });
     console.log('Inserted:', patient);
