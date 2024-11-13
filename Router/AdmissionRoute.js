@@ -67,33 +67,53 @@ router.post('/patientadmissiondetail/:id', async (req, res) => {
 
 // Update detaiils of patient with id
 router.post('/updateadmission/:id', async (req, res) => {
-    const { id } = req.params;
-    console.log(id)
-    const updateData = req.body;
-    console.log(updateData)
+  const { id } = req.params;
+  console.log(id)
+  const updateData = req.body;
+  console.log(updateData)
+  
+  try {
+    // Find the patient by id and update with new data
+    const updatedadmission = await Admission.findOneAndUpdate(
+      { patientid: id },  // Find patient by id
+      { $set: updateData },  // Update the patient's details with the new data
+      { new: true } // Return the updated document
+    );
     
-    try {
-      // Find the patient by id and update with new data
-      const updatedadmission = await Admission.findOneAndUpdate(
-        { _id: id },  // Find patient by id
-        { $set: updateData },  // Update the patient's details with the new data
-        { new: true } // Return the updated document
-      );
-      
-      // If no patient found, return a 404 error
-      if (!updatedadmission) {
-        return res.status(404).json({ message: 'Not Updated' });
-      }
-  
-      // Return the updated patient
-      res.status(200).json({message: 'Details Updated Sucessfully' , updatedadmission});
-      console.log(updatedadmission)
-  
-    } catch (error) {
-      console.error('Error updating admission details:', error);
-      res.status(500).json({ message: 'Error updating admission details', error: error.message });
+    // If no patient found, return a 404 error
+    if (!updatedadmission) {
+      return res.status(404).json({ message: 'Not Updated' });
     }
-  });
+
+    // Return the updated patient
+    res.status(200).json({message: 'Details Updated Sucessfully' , updatedadmission});
+    console.log(updatedadmission)
+
+  } catch (error) {
+    console.error('Error updating admission details:', error);
+    res.status(500).json({ message: 'Error updating admission details', error: error.message });
+  }
+});
+
+  
+// DELETE route to delete a test by ObjectId
+router.post('/deleteadmission', async (req, res) => {
+  try {
+    const {id} = req.body; // Assuming the _id is sent as a URL parameter
+    console.log(id)
+    // Deleting a admission by ObjectId
+    const admit = await Admission.findOneAndDelete({ 'id' : id});
+
+    if (!admit) {
+      return res.status(404).json({ message: "admission not found" });
+    }
+
+    res.status(200).json({ message: "Admission deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting admission", error: error.message });
+    console.log(error.message);
+  }
+});
 
 
 module.exports = router
