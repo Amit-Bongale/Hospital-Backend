@@ -5,13 +5,12 @@ const Medicalhistory = require('../Models/Medicalhistoryinfo')
 router.post("/createmedicalhistory" , async (req, res) => {
 
     try {
-        const {patientid , doctorid , date , diagnosis , prescription } = req.body;
+        const {patientid , doctorid , disease , prescription } = req.body;
 
         const medicalhistory = await Medicalhistory.create({
             'patientid' : patientid,
             'doctorid' : doctorid,
-            'date' : date,
-            'diagnosis' : diagnosis,
+            'disease' : disease,
             'prescription' : prescription,
         })
 
