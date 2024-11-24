@@ -19,17 +19,17 @@ router.post('/allbills', async (req, res) => {
 // Find Bill of a single patient
 router.post('/findbill/:id', async (req, res) => {
     const { id } = req.params;
-    console.log(id)
+    console.log("bill:" , id)
     
     try {
       // Find one patient by the  id
-      const patientbill = await Bill.findOne({ 'id' : id , 'status' : "not paid"});
+      const patientbill = await Bill.findOne({ 'patientid' : id , 'status' : "not paid"});
   
       if (!patientbill) {
         return res.status(404).json({ message: `patient bill not found ${id}` });
       }
   
-      res.status(200).json({patientbill});
+      res.status(200).json(patientbill);
       console.log(patientbill)
     } catch (error) {
       console.error('Error fetching patient:', error);
