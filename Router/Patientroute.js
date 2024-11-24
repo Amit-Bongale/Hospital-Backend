@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Patient = require('../Models/Patientinfo')
 
+
 const { sendWelcomeMessage } = require('../Utility/Messager')
 const {sendWelcomeEmail} = require('../Utility/Sendmail')
 
@@ -34,6 +35,8 @@ router.post('/createnewpatient', async (req, res)=>{
       'medicalhistory' : medicalhistory,
       'password' : password,
     });
+
+
 
     await sendWelcomeEmail(email, name, id, password);
     

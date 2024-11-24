@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Queue = require('../Models/Queueinfo')
+const Bill = require('../Models/Billinfo')
 
 router.post("/createqueue" , async (req, res) => {
     try {
@@ -17,6 +18,11 @@ router.post("/createqueue" , async (req, res) => {
             'status' : status,
             'doctorid' : doctorid,
         })
+
+        await Bill.create({
+            'patientid' : id,
+        })
+        
         res.status(200).json({message : 'Patient Added To Queue' , queue})
 
     } catch (error) {

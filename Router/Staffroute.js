@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Staffinfo = require('../Models/Staffinfo')
+const Staff = require('../Models/Staffinfo')
 
 
 // add staff
@@ -9,7 +9,7 @@ router.post('/createstaff', async (req, res)=>{
     const { id, name, gender, email, phone, role, experience, dob, password , image } = req.body;
     console.log(req.body)
 
-    const staff = await Staffinfo.create({
+    const staff = await Staff.create({
       'id' : id,
       'name' : name,
       'gender' : gender,
@@ -41,7 +41,7 @@ router.post('/createstaff', async (req, res)=>{
 // find all staffs
 router.post('/allstaff', async (req, res) => {
   try {
-    const staff = await Staffinfo.find(); 
+    const staff = await Staff.find(); 
     res.status(200).json(staff); 
     // console.log(staff)
   } catch (error) {
@@ -58,7 +58,7 @@ router.get('/findstaff/:id', async (req, res) => {
   console.log(id)
   
   try {
-    const staff = await Staffinfo.findOne({ 'id' : id });
+    const staff = await Staff.findOne({ 'id' : id });
 
     if (!staff) {
       return res.status(404).json({ message: `staff not found ${id}` });
@@ -81,7 +81,7 @@ router.post('/updatestaff/:id', async (req, res) => {
   
   try {
     // Find the staff by id and update with new data
-    const updatedstaff = await Staffinfo.findOneAndUpdate(
+    const updatedstaff = await Staff.findOneAndUpdate(
       { id: id },  // Find staff by id
       { $set: updateData },  // Update the staff's details with the new data
       { new: true } // Return the updated document
@@ -111,7 +111,7 @@ router.post('/deletestaff', async (req, res) => {
     console.log(id)
 
     // Deleting a staff by Id
-    const staff = await Staffinfo.findOneAndDelete({ 'id' : id});
+    const staff = await Staff.findOneAndDelete({ 'id' : id});
 
     if (!staff) {
       return res.status(404).json({ message: "Staff not found" });
@@ -128,14 +128,65 @@ router.post('/deletestaff', async (req, res) => {
 // find Total number of staff and active staff
 router.get('/staffstats', async (req, res) => {
   try {
-    const totalstaff = await Staffinfo.countDocuments({});
-    const activestaff = await Staffinfo.countDocuments({ 'status': true });
+    const totalstaff = await Staff.countDocuments({});
+    const activestaff = await Staff.countDocuments({ 'status': true });
 
     res.status(200).json({ totalstaff, activestaff });
     // console.log(totalstaff , activestaff)
   } catch (error) {
     console.error("Error fetching Staff statistics:", error);
     res.status(500).json({ message: 'Error fetching Staff statistics', error: error.message });
+  }
+});
+
+
+
+router.post('/login', async (req, res) => {
+
+  const { id, password } = req.body;
+
+  try {
+    // Check if the user exists
+    const user = await Staff.findOne({'id' : id });
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'Account Does not Exist' });
+    }
+    
+    console.log(user)
+    // Check if the password matches
+    if (user.password !== password) {
+      return res.status(401).json({ success: false, message: 'Invalid password' });
+    }
+
+    // update staff status to active
+    await Staff.updateOne({ 'id' : id }, { 'status': true });
+
+    // Respond with success message
+    res.status(200).json({ success: true, message: 'Login successful',
+      user: { 
+        id: user.id, 
+        name: user.name,
+      }
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+
+// set Doctor status inactive after logout
+router.post('/logout', async (req, res) => {
+  const { id } = req.body;
+
+  try {
+    
+    await Staff.updateOne({ 'id' : id }, { 'status': false });
+    res.status(200).json({ success: true, message: 'Logged out successfully' });
+  
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 });
 

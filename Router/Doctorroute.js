@@ -162,6 +162,8 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ success: false, message: 'Invalid password' });
     }
 
+    await Doctor.updateOne({ 'id' : id }, { 'status': true });
+
     // Respond with success message
     res.status(200).json({ success: true, message: 'Login successful',
       user: { 
@@ -171,6 +173,22 @@ router.post('/login', async (req, res) => {
     });
   } catch (error) {
     console.error("Login error:", error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+
+// set Doctor status inactive after logout
+router.post('/logout', async (req, res) => {
+  const { id } = req.body;
+
+  try {
+
+    await Doctor.updateOne({ 'id' : id }, { 'status': false });
+    res.status(200).json({ success: true, message: 'Logged out successfully' });
+  
+  } catch (error) {
+    console.error("Logout error:", error);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
