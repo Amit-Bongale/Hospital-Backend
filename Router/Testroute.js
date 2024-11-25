@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const Test = require('../Models/Testinfo');
+const Bill = require('../Models/Billinfo');
 
 // Create a new test
 router.post("/create", async (req, res) => {
   try {
-    const { patientid, patientname, doctorid, staffid, testname, result, status, fee } = req.body;
+    const { patientid, patientname, doctorid, staffid, testname, result, status } = req.body;
     const test = await Test.create({
-      staffid, patientid, patientname, doctorid, testname, result, status, fee
+      staffid, patientid, patientname, doctorid, testname, result, status
     });
     res.status(200).json({ message: 'Test Added', test });
   } catch (error) {
@@ -47,19 +48,14 @@ router.post('/updatetest/:id', async (req, res) => {
   const { id } = req.params;
   const updateData = req.body;
   try {
-
-     // Find the existing document to get the current value of enterAmount
-     const test = await Test.findById(id);
-     if (!test) {
-       return res.status(404).json({ message: 'Test not found' });
-     }
-     // Auto-increment the `enterAmount` field, or initialize it to 1 if not present
-     const incrementedAmount = (test.enterAmount || 0) ;
-
-    const updatedTest = await Test.findByIdAndUpdate(id, { $set: updateData, enterAmount: incrementedAmount}, { new: true });
+    const updatedTest = await Test.findByIdAndUpdate(id, { $set: updateData}, { new: true });
     if (!updatedTest) {
       return res.status(404).json({ message: 'Test not found' });
     }
+    const result = await Bill.updateOne(
+      { patientid: patientId }, // Find the document by patientid
+      { $set: { 'fees.testfee': newTestFee } } // Update the testfee
+  );
     res.status(200).json({ message: 'Test details updated successfully', updatedTest });
   } catch (error) {
     console.error('Error updating test details:', error);
