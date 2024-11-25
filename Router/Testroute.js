@@ -52,11 +52,11 @@ router.post('/updatetest/:id', async (req, res) => {
     if (!updatedTest) {
       return res.status(404).json({ message: 'Test not found' });
     }
-    const result = await Bill.updateOne(
-      { patientid: patientId }, // Find the document by patientid
+    const { id } = await Bill.updateOne(
+      { 'patientid': id }, // Find the document by patientid
       { $set: { 'fees.testfee': newTestFee } } // Update the testfee
   );
-    res.status(200).json({ message: 'Test details updated successfully', updatedTest });
+    res.status(200).json({ message: 'Test details updated successfully', updatedTest }) ;
   } catch (error) {
     console.error('Error updating test details:', error);
     res.status(500).json({ message: 'Error updating test details', error: error.message });

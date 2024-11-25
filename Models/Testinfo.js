@@ -8,6 +8,7 @@ const TestSchema = new mongoose.Schema({
     testname : {type: String , required: true},
     result : {type: String},
     status : {type: String},
+    fee : {type: Number},
     date : {type: Date, default: Date.now}
 })
 
