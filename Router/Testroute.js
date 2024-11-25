@@ -70,6 +70,7 @@ router.post('/updatetest/:id', async (req, res) => {
   console.log(updateData)
   const newTestFee = updateData.fee;
   
+  
   try {
     // Find the patient by id and update with new data
     const updatedtest = await Test.findOneAndUpdate(
@@ -84,13 +85,15 @@ router.post('/updatetest/:id', async (req, res) => {
     }
 
     const billUpdateResult = await Bill.updateOne(
-      { 'patientid': id }, // Find the document by patientid
+      { 'patientid': updateData.patientid }, // Find the document by patientid
       { $set: { 'fees.testfee': newTestFee } } // Update the testfee
-  );
+    );
+
+    console.log('billfee:', billUpdateResult)
 
     // Return the updated patient
     res.status(200).json({message: 'Details Updated Sucessfully' , updatedtest});
-    console.log(updatedtest)
+    // console.log(updatedtest)
 
   } catch (error) {
     console.error('Error updating test details:', error);
