@@ -57,4 +57,25 @@ router.post('/allpatient/:doctorid', async (req, res) => {
 });
 
 
+
+router.post('/deletepatient', async (req, res) => {
+    try {
+      const {id} = req.body; // Assuming the _id is sent as a URL parameter
+      console.log(id)
+      // Deleting a test by ObjectId
+      const queue = await Queue.findOneAndDelete({ 'id' : id});
+  
+      if (!queue) {
+        return res.status(404).json({ message: "Patient not found" });
+      }
+  
+      res.status(200).json({ message: " Treatment is done" });
+    } catch (error) {
+      res.status(500).json({ message: "The treatment has not been completed.", error: error.message });
+      console.log(error.message);
+    }
+  });
+
+
 module.exports = router
+
