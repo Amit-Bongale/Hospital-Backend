@@ -122,4 +122,26 @@ router.post('/deletetest', async (req, res) => {
 });
 
 
+// Find details of a single patients test details
+router.post('/findtest/:id', async (req, res) => {
+  const { id } = req.params;
+  console.log(id)
+  
+  try {
+    // Find one patient by the  id
+    const test = await Test.findOne({ 'id' : id });
+
+    if (!test) {
+      return res.status(404).json({ message: `test not found ${id}` });
+    }
+
+    // res.status(200).json(test);
+    res.send(test)
+  } catch (error) {
+    console.error('Error fetching test:', error);
+    res.status(500).json({ message: 'Error fetching test', error: error.message });
+  }
+});
+
+
 module.exports = router
