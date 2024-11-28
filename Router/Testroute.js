@@ -5,41 +5,41 @@ const Bill = require('../Models/Billinfo')
 
 router.post("/create" , async (req, res) => {
 
-    try {
-        const {patientid , patientname , doctorid , staffid , testname , result , status, } = req.body;
+  try {
+    const {patientid , patientname , doctorid , staffid , testname , result , status, } = req.body;
 
-        const test = await Test.create({
-            'staffid' : staffid,
-            'patientid' : patientid,
-            'patientname' : patientname,
-            'doctorid' : doctorid,
-            'testname' : testname,
-            'status' : status,
-            'result' : result,
-        })
+    const test = await Test.create({
+      'staffid' : staffid,
+      'patientid' : patientid,
+      'patientname' : patientname,
+      'doctorid' : doctorid,
+      'testname' : testname,
+      'status' : status,
+      'result' : result,
+    })
 
-        res.status(200).json({message : 'Test Added' , test})
-        
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({ message: 'Error inserting test', error: error.message });
-    }
+    res.status(200).json({message : 'Test Added' , test})
+      
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Error inserting test', error: error.message });
+  }
 })
 
 
 
 router.post('/testdetails', async (req, res) => {
-    try {
-      const test = await Test.find(); // Fetch test details from the collection
-      res.status(200).json(test);
-      // console.log(patient)
-    } catch (error) {
-      console.error("Error fetching test details:", error);
-      res.status(500).json({ message: 'Error fetching test details', error: error.message });
-    }
-  });
+  try {
+    const test = await Test.find(); // Fetch test details from the collection
+    res.status(200).json(test);
+    // console.log(patient)
+  } catch (error) {
+    console.error("Error fetching test details:", error);
+    res.status(500).json({ message: 'Error fetching test details', error: error.message });
+  }
+});
 
-  // Find details of a single patient
+// Find details of a single patient
 router.post('/patienttestdetail/:id', async (req, res) => {
   const { id } = req.params;
   console.log(id)
@@ -70,7 +70,6 @@ router.post('/updatetest/:id', async (req, res) => {
   console.log(updateData)
   const newTestFee = updateData.fee;
   
-  
   try {
     // Find the patient by id and update with new data
     const updatedtest = await Test.findOneAndUpdate(
@@ -87,7 +86,7 @@ router.post('/updatetest/:id', async (req, res) => {
     const billUpdateResult = await Bill.updateOne(
       { 'patientid': updateData.patientid }, // Find the document by patientid
       { $set: { 'fees.testfee': newTestFee } } // Update the testfee
-    );
+    );
 
     console.log('billfee:', billUpdateResult)
 
@@ -120,6 +119,10 @@ router.post('/deletetest', async (req, res) => {
     console.log(error.message);
   }
 });
+
+
+
+
 
 
 module.exports = router
