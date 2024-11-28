@@ -143,4 +143,23 @@ router.post('/findtest/:id', async (req, res) => {
 });
 
 
+
+// Fetch last test of patient
+router.post('/last/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const test = await Test.find({ 'patientid': id }).sort({date : -1}).limit(1);
+
+    if (!test.length) {
+        return res.status(404).json({ message: `No Test found for patient ${id}` });
+    }
+    res.status(200).json(test);
+      
+  } catch (error) {
+    console.error('Error fetching test history:', error);
+    res.status(500).json({ message: 'Error fetching test history', error: error.message });
+  }
+});
+
+
 module.exports = router

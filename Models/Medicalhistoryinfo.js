@@ -8,7 +8,7 @@ const MedicalhistorySchema = new mongoose.Schema({
     disease : {type: String , required: true},
     appointmenttype : {type : String, required : true},
     prescription : {type: String},
-})
+}) 
 
 const Medicalhistory = mongoose.model('Medicalhistory', MedicalhistorySchema)
 module.exports = Medicalhistory;
