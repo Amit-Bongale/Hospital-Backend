@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Doctor = require('../Models/Doctorinfo')
+const {hashPassword} = require('../Utility/bcrypt')
 
 
 // insert doctors
@@ -10,12 +11,14 @@ router.post('/createdoctor', async (req, res)=>{
     const { id, name, gender, email, password, specialization, phone, experience, dob , image} = req.body;
     console.log( "body:", req.body)
 
+    const hashedPassword = await hashPassword(password);
+
     const doctor = await Doctor.create({
       'id': id,
       'name': name,
       'gender': gender,
       'email': email,
-      'password': password,
+      'password': hashedPassword,
       'specialization': specialization,
       'phone': phone,
       'experience': experience,
@@ -181,9 +184,7 @@ router.post('/login', async (req, res) => {
 // set Doctor status inactive after logout
 router.post('/logout', async (req, res) => {
   const { id } = req.body;
-
   try {
-
     await Doctor.updateOne({ 'id' : id }, { 'status': false });
     res.status(200).json({ success: true, message: 'Logged out successfully' });
   

@@ -5,15 +5,16 @@ const Bill = require('../Models/Billinfo')
 
 // get all bills
 router.post('/allbills', async (req, res) => {
-    try {
-      const patient = await Bill.find(); // Fetch all patient from the collection
-      res.status(200).json(patient);
-      // console.log(patient)
-    } catch (error) {
-      console.error("Error fetching Bills:", error);
-      res.status(500).json({ message: 'Error fetching Bills', error: error.message });
-    }
+  try {
+    const patient = await Bill.find(); // Fetch all patient from the collection
+    res.status(200).json(patient);
+    // console.log(patient)
+  } catch (error) {
+    console.error("Error fetching Bills:", error);
+    res.status(500).json({ message: 'Error fetching Bills', error: error.message });
+  }
 });
+
 
 router.post('/bills', async (req, res) => {
   try {

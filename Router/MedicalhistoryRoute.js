@@ -76,5 +76,4 @@ router.post('/prescription/:id', async (req, res) => {
 });
 
 
-
 module.exports = router;

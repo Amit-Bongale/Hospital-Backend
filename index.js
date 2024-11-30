@@ -6,7 +6,6 @@ const env = require('dotenv');
 env.config()
 
 const port = 3000 || process.env.PORT
-
 const app = express()
 
 app.use(cors());
@@ -21,7 +20,6 @@ app.listen(port , () => {
 })
 
 
-
 const Adminroute = require('./Router/AdminRoute')
 const Doctorroute = require('./Router/DoctorRoute')
 const Patientroute = require('./Router/PatientRoute')
@@ -34,6 +32,8 @@ const Contactusroute = require('./Router/ContactusRoute')
 const Admissionroute = require('./Router/AdmissionRoute')
 const Medicalhistoryroute = require('./Router/MedicalhistoryRoute')
 const Billroute = require('./Router/BillRoute')
+
+
 
 
 app.use('/admin' , Adminroute) 

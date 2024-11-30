@@ -108,23 +108,23 @@ router.post('/allpatients', async (req, res) => {
 
 // Find details of a single patient
 router.post('/findpatient/:id', async (req, res) => {
-    const { id } = req.params;
-    console.log(id)
-    
-    try {
-      // Find one patient by the  id
-      const patient = await Patient.findOne({ 'id' : id });
+  const { id } = req.params;
+  console.log(id)
   
-      if (!patient) {
-        return res.status(404).json({ message: `patient not found ${id}` });
-      }
-  
-      // res.status(200).json(patient);
-      res.send(patient)
-    } catch (error) {
-      console.error('Error fetching patient:', error);
-      res.status(500).json({ message: 'Error fetching patient', error: error.message });
+  try {
+    // Find one patient by the  id
+    const patient = await Patient.findOne({ 'id' : id });
+
+    if (!patient) {
+      return res.status(404).json({ message: `patient not found ${id}` });
     }
+
+    // res.status(200).json(patient);
+    res.send(patient)
+  } catch (error) {
+    console.error('Error fetching patient:', error);
+    res.status(500).json({ message: 'Error fetching patient', error: error.message });
+  }
 });
 
 
