@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Patient = require('../Models/Patientinfo')
-
+const { hashPassword , comparePassword } = require('../Utility/bcrypt')
 
 const { sendWelcomeMessage } = require('../Utility/Messager')
 const {sendWelcomeEmail} = require('../Utility/Sendmail')
@@ -20,6 +20,8 @@ router.post('/createnewpatient', async (req, res)=>{
     
     console.log(req.body)
 
+    const hashedPassword = await hashPassword(password);
+
     const patient = await Patient.create({
       'id' : id,
       'name' : name,
@@ -33,19 +35,15 @@ router.post('/createnewpatient', async (req, res)=>{
       'bloodgroup' : bloodgroup,
       'aadharno' : aadharno,
       'medicalhistory' : medicalhistory,
-      'password' : password,
+      'password' : hashedPassword,
     });
-
-
 
     await sendWelcomeEmail(email, name, id, password);
     
     await sendWelcomeMessage(name, phone, id, password);
 
-
     res.status(200).json({ message: 'Patient inserted successfully', patient });
     console.log('Inserted:', patient);
-
   }
   catch (error) {
     console.error("Insertion Error:", error);
@@ -67,6 +65,8 @@ router.post('/createnewuser', async (req, res)=>{
       return res.status(400).json({ message: 'An account with this Details already exists. Please login' });
     }
 
+    const hashedPassword = await hashPassword(password);
+
     const patient = await Patient.create({
       'id' : id,
       'name' : name,
@@ -80,7 +80,7 @@ router.post('/createnewuser', async (req, res)=>{
       'bloodgroup' : bloodgroup,
       'aadharno' : aadharno,
       'medicalhistory' : medicalhistory,
-      'password' : password,
+      'password' : hashedPassword,
     });
     res.status(200).json({success: true, message: 'Account Created successfully, Please Login to Continue', patient });
     console.log('Inserted:', patient);
@@ -134,6 +134,11 @@ router.post('/updatepatient/:id', async (req, res) => {
   const updateData = req.body;
   
   try {
+
+    if (updateData.password) {
+      updateData.password = await hashPassword (updateData.password); // Hash the new password
+    }
+
     // Find the patient by id and update with new data
     const updatedpatient = await Patient.findOneAndUpdate(
       { id: id },  // Find patient by id
@@ -191,9 +196,11 @@ router.post('/login', async (req, res) => {
       return res.status(404).json({ success: false, message: 'Account Does not Exist' });
     }
     console.log(user)
+
     // Check if the password matches
-    if (user.password !== password) {
-      return res.status(401).json({ success: false, message: 'Invalid password' });
+    const isMatch = await comparePassword( password, user.password );
+    if (!isMatch) {
+      return res.status(401).send({ error: 'Invalid password.' });
     }
 
     // Respond with success message
@@ -204,6 +211,7 @@ router.post('/login', async (req, res) => {
         // You can include other user details as needed
       }
     });
+    
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ success: false, message: 'Server error' });

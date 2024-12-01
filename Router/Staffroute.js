@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Staff = require('../Models/Staffinfo')
+const { hashPassword , comparePassword } = require('../Utility/bcrypt')
 
 
 // add staff
@@ -8,6 +9,8 @@ router.post('/createstaff', async (req, res)=>{
   try {
     const { id, name, gender, email, phone, role, experience, dob, password , image } = req.body;
     console.log(req.body)
+
+    const hashedPassword = await hashPassword(password);
 
     const staff = await Staff.create({
       'id' : id,
@@ -18,7 +21,7 @@ router.post('/createstaff', async (req, res)=>{
       'phone' : phone,
       'role' : role,
       'experience' : experience,
-      'password' : password,
+      'password' : hashedPassword,
       'image' : image,
       'status' : false
     });
@@ -80,6 +83,11 @@ router.post('/updatestaff/:id', async (req, res) => {
   const updateData = req.body;
   
   try {
+
+    if (updateData.password) {
+      updateData.password = await hashPassword (updateData.password); // Hash the new password
+    }
+
     // Find the staff by id and update with new data
     const updatedstaff = await Staff.findOneAndUpdate(
       { id: id },  // Find staff by id
@@ -154,8 +162,9 @@ router.post('/login', async (req, res) => {
     
     console.log(user)
     // Check if the password matches
-    if (user.password !== password) {
-      return res.status(401).json({ success: false, message: 'Invalid password' });
+    const isMatch = await comparePassword( password, user.password );
+    if (!isMatch) {
+      return res.status(401).send({ error: 'Invalid password.' });
     }
 
     // update staff status to active
@@ -178,12 +187,9 @@ router.post('/login', async (req, res) => {
 // set Doctor status inactive after logout
 router.post('/logout', async (req, res) => {
   const { id } = req.body;
-
   try {
-    
     await Staff.updateOne({ 'id' : id }, { 'status': false });
     res.status(200).json({ success: true, message: 'Logged out successfully' });
-  
   } catch (error) {
     console.error("Logout error:", error);
     res.status(500).json({ success: false, message: 'Server error' });

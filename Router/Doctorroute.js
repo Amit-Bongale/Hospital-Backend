@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Doctor = require('../Models/Doctorinfo')
-const {hashPassword} = require('../Utility/bcrypt')
+const { hashPassword , comparePassword } = require('../Utility/bcrypt')
 
 
 // insert doctors
@@ -89,6 +89,10 @@ router.post('/updatedoctor/:id', async (req, res) => {
   const updateData = req.body;
   
   try {
+    if (updateData.password) {
+      updateData.password = await hashPassword (updateData.password); // Hash the new password
+    }
+    
     // Find the doctor by id and update with new data
     const updatedDoctor = await Doctor.findOneAndUpdate(
       { id: id },  // Find doctor by id
@@ -146,8 +150,6 @@ router.get('/doctorstats', async (req, res) => {
 });
 
 
-
-
 router.post('/login', async (req, res) => {
 
   const { id, password } = req.body;
@@ -161,8 +163,13 @@ router.post('/login', async (req, res) => {
     
     console.log(user)
     // Check if the password matches
-    if (user.password !== password) {
-      return res.status(401).json({ success: false, message: 'Invalid password' });
+    // if (user.password !== password) {
+    //   return res.status(401).json({ success: false, message: 'Invalid password' });
+    // }
+
+    const isMatch = await comparePassword( password, user.password );
+    if (!isMatch) {
+      return res.status(401).send({ error: 'Invalid password.' });
     }
 
     await Doctor.updateOne({ 'id' : id }, { 'status': true });
