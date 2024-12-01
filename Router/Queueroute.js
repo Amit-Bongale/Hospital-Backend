@@ -21,6 +21,7 @@ router.post("/createqueue" , async (req, res) => {
 
         await Bill.create({
             'patientid' : id,
+            'patientname' : name
         })
         
         res.status(200).json({message : 'Patient Added To Queue' , queue})
@@ -78,4 +79,3 @@ router.post('/deletepatient', async (req, res) => {
 
 
 module.exports = router
-

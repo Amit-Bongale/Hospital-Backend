@@ -3,6 +3,7 @@ const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 const Billschema = new mongoose.Schema({
     patientid : {type : String},
+    patientname : {type : String},
     date : {type: Date, default: Date.now()},
     status : {type: String, default:"not paid"},
     fees : {

@@ -38,7 +38,7 @@ router.post('/findbill/:id', async (req, res) => {
       return res.status(400).json({ message: "Patient ID is required" });
     }
     // Find one patient by the  id
-    const patientbill = await Bill.findOne({ 'patientid' : id , 'status' : "not paid"});
+    const patientbill = await Bill.findOne({ 'billno' : id , 'status' : "not paid"});
 
     if (!patientbill) {
       return res.status(404).json({ message: `patient bill not found ${id}` });
@@ -49,6 +49,19 @@ router.post('/findbill/:id', async (req, res) => {
   } catch (error) {
     console.error('Error fetching patient:', error);
     res.status(500).json({ message: 'Error fetching patient', error: error.message });
+  }
+});
+
+
+// set Doctor status inactive after logout
+router.post('/paid', async (req, res) => {
+  const { billno } = req.body;
+  try {
+    await Bill.updateOne({ 'billno' : billno }, { 'status': 'paid' });
+    res.status(200).json({ success: true, message: 'Bill Updated' });
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 });
 
