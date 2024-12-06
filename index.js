@@ -32,6 +32,7 @@ const Contactusroute = require('./Router/ContactusRoute')
 const Admissionroute = require('./Router/AdmissionRoute')
 const Medicalhistoryroute = require('./Router/MedicalhistoryRoute')
 const Billroute = require('./Router/BillRoute')
+const Wardroute = require('./Router/WardRoute') 
 
 
 
@@ -48,3 +49,4 @@ app.use('/contactus' , Contactusroute)
 app.use('/admission' , Admissionroute)
 app.use('/medicalhistory' , Medicalhistoryroute)
 app.use('/bill' , Billroute)
+app.use('/ward' , Wardroute)

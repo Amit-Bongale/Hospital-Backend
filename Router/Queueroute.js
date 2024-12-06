@@ -75,7 +75,19 @@ router.post('/deletepatient', async (req, res) => {
       res.status(500).json({ message: "The treatment has not been completed.", error: error.message });
       console.log(error.message);
     }
-  });
+});
 
 
+
+// find Total number of doctors and active doctors
+router.get('/active', async (req, res) => {
+    try {
+      const activepatients = await Queue.countDocuments({});
+      res.status(200).json(activepatients);
+    } catch (error) {
+      console.error("Error fetching Patient statistics:", error);
+      res.status(500).json({ message: 'Error fetching patient statistics', error: error.message });
+    }
+});
+  
 module.exports = router

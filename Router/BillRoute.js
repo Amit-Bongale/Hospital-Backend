@@ -66,4 +66,74 @@ router.post('/paid', async (req, res) => {
 });
 
 
+// Function to calculate revenue for a specific date range
+const calculateRevenueForRange = async (startDate, endDate) => {
+  return await Bill.aggregate([
+    {
+      $addFields: {
+        totalFee: {
+          $add: [
+            "$fees.consultationfee",
+            "$fees.testfee",
+            "$fees.admissionfee",
+          ],
+        },
+      },
+    },
+    {
+      $match: {
+        date: {
+          $gte: new Date(startDate), // Start date
+          $lt: new Date(endDate),   // End date (exclusive)
+        },
+      },
+    },
+    {
+      $group: {
+        _id: null, // No grouping, just sum for the range
+        totalAmount: { $sum: "$totalFee" },
+      },
+    },
+  ]);
+};
+
+
+// Route to get revenue for current day, month, and year
+router.get('/revenue', async (req, res) => {
+  
+  try {
+    // Get the current date
+    const now = new Date();
+
+    // Calculate the start and end dates for current day
+    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+
+    // Calculate the start and end dates for current month
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+
+    // Calculate the start and end dates for current year
+    const startOfYear = new Date(now.getFullYear(), 0, 1);
+    const endOfYear = new Date(now.getFullYear() + 1, 0, 1);
+
+    // Fetch revenue for each range
+    const [dailyRevenue] = await calculateRevenueForRange(startOfDay, endOfDay);
+    const [monthlyRevenue] = await calculateRevenueForRange(startOfMonth, endOfMonth);
+    const [yearlyRevenue] = await calculateRevenueForRange(startOfYear, endOfYear);
+
+    // Return the results
+    res.json({
+      dailyRevenue: dailyRevenue?.totalAmount || 0,
+      monthlyRevenue: monthlyRevenue?.totalAmount || 0,
+      yearlyRevenue: yearlyRevenue?.totalAmount || 0,
+    });
+
+  } catch (error) {
+    console.error('Error calculating revenue:', error);
+    res.status(500).json({ error: 'Error calculating revenue' });
+  }
+});
+
+
 module.exports = router
