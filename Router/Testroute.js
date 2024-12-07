@@ -52,9 +52,8 @@ router.post('/patienttestdetail/:id', async (req, res) => {
       return res.status(404).json({ message: 'test details of patient not found ${id}' });
     }
 
-    // res.status(200).json(patient);
-    res.send(test)
-    console.log(test)
+    res.status(200).send(test)
+
   } catch (error) {
     console.error('Error fetching test details:', error);
     res.status(500).json({ message: 'Error fetching test details', error: error.message });
