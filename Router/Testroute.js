@@ -46,12 +46,11 @@ router.post('/patienttestdetail/:id', async (req, res) => {
   
   try {
     // Find one patient by the  id
-    const test = await Test.find({ 'patientid' : id });
+    const test = await Test.find({ '_id' : id });
 
     if (!test) {
       return res.status(404).json({ message: 'test details of patient not found ${id}' });
     }
-
     res.status(200).send(test)
 
   } catch (error) {
