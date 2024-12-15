@@ -105,25 +105,38 @@ router.post('/updateward/:id', async (req, res) => {
 
 // DELETE route to delete a ward by Id
 router.post('/deleteward', async (req, res) => {
-    try {
-      const {id} = req.body; 
-      console.log(id)
-  
-      // Deleting a ward by Id
-      const ward = await Ward.findOneAndDelete({ '_id' : id});
-  
-      if (!ward) {
-        return res.status(404).json({ message: "ward not found" });
-      }
-  
-      res.status(200).json({ message: "ward deleted successfully" });
-  
-    } catch (error) {
-      res.status(500).json({ message: "Error deleting ward", error: error.message });
-      console.log(error.message);
+  try {
+    const {id} = req.body; 
+    console.log(id)
+
+    // Deleting a ward by Id
+    const ward = await Ward.findOneAndDelete({ '_id' : id});
+
+    if (!ward) {
+      return res.status(404).json({ message: "ward not found" });
     }
+
+    res.status(200).json({ message: "ward deleted successfully" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting ward", error: error.message });
+    console.log(error.message);
+  }
 });
 
+// find Total number of wards and occupied Beds
+router.get('/wardstats', async (req, res) => {
+  try {
+    const totalbeds = await Ward.countDocuments({});
+    const activebeds = await Ward.countDocuments({ 'status': "unoccupied" });
+
+    res.status(200).json({ totalbeds, activebeds });
+
+  } catch (error) {
+    console.error("Error fetching Ward statistics:", error);
+    res.status(500).json({ message: 'Error fetching ward statistics', error: error.message });
+  }
+});
 
 
 module.exports = router
