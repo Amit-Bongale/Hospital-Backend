@@ -30,7 +30,7 @@ router.post("/create" , async (req, res) => {
 
 router.post('/testdetails', async (req, res) => {
   try {
-    const test = await Test.find(); // Fetch test details from the collection
+    const test = await Test.find({ status: { $ne: "Completed" } }); // Fetch test details which not not completed
     res.status(200).json(test);
     // console.log(patient)
   } catch (error) {
@@ -46,7 +46,7 @@ router.post('/patienttestdetail/:id', async (req, res) => {
   
   try {
     // Find one patient by the  id
-    const test = await Test.find({ 'patientid' : id });
+    const test = await Test.find({ 'patientid' : id }).sort({date : -1});
 
     if (!test) {
       return res.status(404).json({ message: 'test details of patient not found ${id}' });

@@ -7,7 +7,7 @@ const TestSchema = new mongoose.Schema({
     doctorid : {type: String , required: true},
     testname : {type: String , required: true},
     result : {type: String},
-    status : {type: String},
+    status : {type: String, default: "Pending"},
     fee : {type: Number},
     date : {type: Date, default: Date.now}
 })

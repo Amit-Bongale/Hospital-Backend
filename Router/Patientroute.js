@@ -195,13 +195,14 @@ router.post('/login', async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: false, message: 'Account Does not Exist' });
     }
-    console.log(user)
+    // console.log(user)
 
     // Check if the password matches
     const isMatch = await comparePassword( password, user.password );
     if (!isMatch) {
       return res.status(401).send({ error: 'Invalid password.' });
     }
+    console.log(isMatch)
 
     // Respond with success message
     res.status(200).json({ success: true, message: 'Login successful',
