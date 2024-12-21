@@ -7,7 +7,7 @@ const QueueSchema = new mongoose.Schema({
     disease : {type : String , required: true},
     type : {type : String},
     mobileno : {type : String , required: true},
-    status : {type: String},
+    status : {type: String, default: "Waiting"},
     doctorid : {type : String},
     date : {type: Date ,  default: Date.now}
 })

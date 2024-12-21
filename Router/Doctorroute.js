@@ -1,8 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const Doctor = require('../Models/Doctorinfo')
+const Doctorinfoschema = require('../Models/Doctorinfo')
 const { hashPassword , comparePassword } = require('../Utility/bcrypt')
-
+const Queue = require('../Models/Queueinfo')
 
 // insert doctors
 router.post('/createdoctor', async (req, res)=>{
@@ -162,10 +163,6 @@ router.post('/login', async (req, res) => {
     }
     
     console.log(user)
-    // Check if the password matches
-    // if (user.password !== password) {
-    //   return res.status(401).json({ success: false, message: 'Invalid password' });
-    // }
 
     const isMatch = await comparePassword( password, user.password );
     if (!isMatch) {
@@ -200,6 +197,54 @@ router.post('/logout', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
+
+router.post('/doctordetailsqueue', async (req, res) => {
+  try {
+    const doctorsWithQueueCount = await Doctorinfoschema.aggregate([
+      {
+        $lookup: {
+          from: "queues", // Name of the Queue collection in MongoDB (should match the actual name in lowercase)
+          localField: "id",
+          foreignField: "doctorid",
+          as: "queueDetails",
+        },
+      },
+      {
+        $addFields: {
+          queueCount: {
+            $size: {
+              $filter: {
+                input: "$queueDetails",
+                as: "queue",
+                cond: { $eq: ["$$queue.status", "Waiting"] },
+              },
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          id: 1,
+          name: 1,
+          gender: 1,
+          email: 1,
+          specialization: 1,
+          phone: 1,
+          experience: 1,
+          dob: 1,
+          image: 1,
+          status: 1,
+          queueCount: 1,
+        },
+      },
+    ]);
+    res.status(200).json(doctorsWithQueueCount);
+
+  } catch (error) {
+    console.error("Error fetching doctors and queue count:", error);
+    throw new Error("Error fetching data");
+  }
+})
 
 
 module.exports = router
