@@ -166,6 +166,7 @@ router.post('/login', async (req, res) => {
     if (!isMatch) {
       return res.status(401).send({ error: 'Invalid password.' });
     }
+    console.log(isMatch);
 
     // update staff status to active
     await Staff.updateOne({ 'id' : id }, { 'status': true });
