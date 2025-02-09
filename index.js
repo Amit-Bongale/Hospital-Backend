@@ -31,14 +31,14 @@ const Appointment = require('./Router/AppointmentRoute.js')
 const salaryroute = require('./Router/Salaryroute.js')
 const Testroute = require('./Router/Testroute.js')
 const Queueroute = require('./Router/Queueroute.js')
-const Contactusroute = require('./Router/Contactusroute.js')
-const Admissionroute = require('./Router/Admissionroute.js')
+const Contactusroute = require('./Router/ContactusRoute.js')
+const Admissionroute = require('./Router/AdmissionRoute.js')
 const Medicalhistoryroute = require('./Router/Medicalhistoryroute.js')
 const Billroute = require('./Router/Billroute.js')
 const Wardroute = require('./Router/Wardroute.js') 
 
 
-
+ 
 
 app.use('/admin' , Adminroute) 
 app.use('/doctor' , Doctorroute)
