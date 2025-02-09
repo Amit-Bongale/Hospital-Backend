@@ -25,8 +25,8 @@ app.listen(port , () => {
 
 const Adminroute = require('./Router/Adminroute.js')
 const Doctorroute = require('./Router/Doctorroute.js')
-const Patientroute = require('./Router/PatientRoute.js')
-const Staffroute = require('./Router/StaffRoute.js')
+const Patientroute = require('./Router/Patientroute.js')
+const Staffroute = require('./Router/Staffroute.js')
 const Appointment = require('./Router/AppointmentRoute.js')
 const salaryroute = require('./Router/SalaryRoute.js')
 const Testroute = require('./Router/Testroute.js')
