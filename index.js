@@ -23,19 +23,19 @@ app.listen(port , () => {
 })
 
 
-const Adminroute = require('./Router/AdminRoute')
-const Doctorroute = require('./Router/DoctorRoute')
-const Patientroute = require('./Router/PatientRoute')
-const Staffroute = require('./Router/StaffRoute')
-const Appointment = require('./Router/AppointmentRoute')
-const salaryroute = require('./Router/SalaryRoute')
-const Testroute = require('./Router/Testroute')
-const Queueroute = require('./Router/Queueroute')
-const Contactusroute = require('./Router/ContactusRoute')
-const Admissionroute = require('./Router/AdmissionRoute')
-const Medicalhistoryroute = require('./Router/MedicalhistoryRoute')
-const Billroute = require('./Router/BillRoute')
-const Wardroute = require('./Router/WardRoute') 
+const Adminroute = require('./Router/AdminRoute.js')
+const Doctorroute = require('./Router/Doctorroute.js')
+const Patientroute = require('./Router/PatientRoute.js')
+const Staffroute = require('./Router/StaffRoute.js')
+const Appointment = require('./Router/AppointmentRoute.js')
+const salaryroute = require('./Router/SalaryRoute.js')
+const Testroute = require('./Router/Testroute.js')
+const Queueroute = require('./Router/Queueroute.js')
+const Contactusroute = require('./Router/ContactusRoute.js')
+const Admissionroute = require('./Router/AdmissionRoute.js')
+const Medicalhistoryroute = require('./Router/MedicalhistoryRoute.js')
+const Billroute = require('./Router/BillRoute.js')
+const Wardroute = require('./Router/WardRoute.js') 
 
 
 
