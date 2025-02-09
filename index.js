@@ -11,6 +11,9 @@ const app = express()
 app.use(cors());
 app.use(express.json());
 
+// enable cors for deployed site
+app.use(cors({ origin: "https://hospital-management-system-x1n5.onrender.com/" }));
+
 mongoose.connect(process.env.DBCONNECTION)
 .then(() => console.log("Connected to Database"))
 .catch((e) => console.log("Error connecting to db" , e))
