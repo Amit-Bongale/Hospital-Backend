@@ -23,7 +23,7 @@ app.listen(port , () => {
 })
 
 
-const Adminroute = require('./Router/AdminRoute.js')
+const Adminroute = require('./Router/Adminroute.js')
 const Doctorroute = require('./Router/Doctorroute.js')
 const Patientroute = require('./Router/PatientRoute.js')
 const Staffroute = require('./Router/StaffRoute.js')
