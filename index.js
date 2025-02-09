@@ -12,12 +12,24 @@ app.use(cors());
 app.use(express.json());
 
 // enable cors for deployed site
+const allowedOrigins = [
+    "https://hospital-management-system-x1n5.onrender.com", 
+    "http://localhost:3001" // Add local frontend for testing
+];
+
 app.use(
-  cors({
-    origin: "https://hospital-management-system-x1n5.onrender.com",
-    credentials: true, // Allow cookies/auth header
-  })
-);
+    cors({
+      origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      },
+      credentials: true, // Allow cookies/auth headers
+    })
+  );
+
 
 mongoose.connect(process.env.DBCONNECTION)
 .then(() => console.log("Connected to Database"))
