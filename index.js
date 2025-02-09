@@ -35,7 +35,7 @@ const Contactusroute = require('./Router/ContactusRoute.js')
 const Admissionroute = require('./Router/AdmissionRoute.js')
 const Medicalhistoryroute = require('./Router/MedicalhistoryRoute.js')
 const Billroute = require('./Router/BillRoute.js')
-const Wardroute = require('./Router/Wardroute.js') 
+const Wardroute = require('./Router/WardRoute.js') 
 
 
  
