@@ -13,7 +13,8 @@ app.use(express.json());
 
 // enable cors for deployed site
 const allowedOrigins = [
-    "https://hospital-management-system-x1n5.onrender.com", 
+    "https://hospital-management-system-x1n5.onrender.com",
+    "https://hospital-managementsystem.vercel.app",  // vercel frontend
     "http://localhost:3001" // Add local frontend for testing
 ];
 
