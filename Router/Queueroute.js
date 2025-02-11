@@ -36,13 +36,18 @@ router.post("/createqueue" , async (req, res) => {
 //TO GET ALL PATIENT IN QUEUE 
 router.post('/allpatient', async (req, res) => {
     try {
-        const queue = await Queue.find(); // Fetch all patients assigned to queue
+        const endOfDay = new Date();
+        endOfDay.setHours(23, 59, 59, 999); // Set time to today's 11:59:59 PM
+
+        const queue = await Queue.find({
+            date: { $lte: endOfDay } // Fetch appointments of patients before today's midnight
+        }); 
+        
         res.status(200).json(queue); 
     } catch (error) {
         console.error("Error fetching doctors:", error);
         res.status(500).json({ message: 'Error fetching doctors', error: error.message });
     }
-
 });
 
 

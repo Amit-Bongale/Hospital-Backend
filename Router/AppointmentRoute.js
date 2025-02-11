@@ -125,6 +125,7 @@ router.post("/approve/:id", async (req, res) => {
       type: appointment.type,
       mobileno: patient.phone,
       doctorid: appointment.doctorid,
+      date: appointment.scheduleddate,
     });
 
     await Bill.create({
