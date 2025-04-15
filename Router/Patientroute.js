@@ -4,7 +4,7 @@ const Patient = require('../Models/Patientinfo')
 const { hashPassword , comparePassword } = require('../Utility/bcrypt')
 
 const jwt = require('jsonwebtoken')
-const VerifyToken = require('../Middleware/verifyToken')
+const VerifyToken = require('../Middleware/VerifyToken')
 const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
 
 const { sendWelcomeMessage } = require('../Utility/Messager')

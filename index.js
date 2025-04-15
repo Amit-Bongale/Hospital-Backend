@@ -74,4 +74,3 @@ app.use("/admission", Admissionroute);
 app.use("/medicalhistory", Medicalhistoryroute);
 app.use("/bill", Billroute);
 app.use("/ward", Wardroute);
-
