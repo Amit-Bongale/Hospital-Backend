@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 const VerifyToken = require('../Middleware/VerifyToken')
 const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
 
-router.post('/addsalary' , async (req , res) => {
+router.post('/addsalary' , VerifyToken, AuthorizedRoles("admin"), async (req , res) => {
   try {
     const { employeeId, employeeType, salaryAmount, paymentStatus, paymentMonth } = req.body;
 
@@ -29,7 +29,7 @@ router.post('/addsalary' , async (req , res) => {
 
 
 // get all salary details
-router.post('/salarydetails', async (req, res) => {
+router.post('/salarydetails', VerifyToken, AuthorizedRoles("admin"), async (req, res) => {
   try {
     const salary = await Salary.find(); 
     res.status(200).json(salary); 
@@ -42,7 +42,7 @@ router.post('/salarydetails', async (req, res) => {
 
 
 // Update Route
-router.post('/updatesalary/:id', async (req, res) => {
+router.post('/updatesalary/:id',  VerifyToken, AuthorizedRoles("admin"), async (req, res) => {
   const { id } = req.params;
   const updateData = req.body;
   
@@ -71,7 +71,7 @@ router.post('/updatesalary/:id', async (req, res) => {
 
 
 // DELETE route to delete a doctor by EmployeeId
-router.post('/deletesalaryinfo', async (req, res) => {
+router.post('/deletesalaryinfo', VerifyToken, AuthorizedRoles("admin"), async (req, res) => {
   try {
     const {id} = req.body; 
     console.log(id)

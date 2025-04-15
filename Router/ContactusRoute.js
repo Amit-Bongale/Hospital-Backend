@@ -6,7 +6,7 @@ const VerifyToken = require('../Middleware/VerifyToken')
 const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
 
 // Insert new contact request
-router.post('/request' , (req,res) => {
+router.post('/request' , VerifyToken, AuthorizedRoles("admin" , "doctor", "staff", "patient"), (req,res) => {
 
     try {
         const {name,email,message} = req.body
@@ -27,7 +27,7 @@ router.post('/request' , (req,res) => {
 
 
 // get all contact requests
-router.post('/allrequest',async (req, res) => {
+router.post('/allrequest', VerifyToken, AuthorizedRoles("admin"), async (req, res) => {
     try {
         const contact = await Contactus.find().sort({ 'date' : -1 });
         console.log(contact)

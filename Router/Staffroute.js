@@ -8,7 +8,7 @@ const VerifyToken = require('../Middleware/VerifyToken')
 const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
 
 // add staff
-router.post('/createstaff', async (req, res)=>{
+router.post('/createstaff', VerifyToken, AuthorizedRoles("admin"), async (req, res)=>{
   try {
     const { id, name, gender, email, phone, role, experience, dob, password , image } = req.body;
     console.log(req.body)
@@ -45,7 +45,7 @@ router.post('/createstaff', async (req, res)=>{
 
 
 // find all staffs
-router.post('/allstaff', async (req, res) => {
+router.post('/allstaff',VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"),  async (req, res) => {
   try {
     const staff = await Staff.find(); 
     res.status(200).json(staff); 
@@ -59,7 +59,7 @@ router.post('/allstaff', async (req, res) => {
 
 
 // Find a single docotr
-router.get('/findstaff/:id', async (req, res) => {
+router.get('/findstaff/:id', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
   const { id } = req.params;
   console.log(id)
   
@@ -79,9 +79,8 @@ router.get('/findstaff/:id', async (req, res) => {
 });
 
 
-
 // Update Route
-router.post('/updatestaff/:id', async (req, res) => {
+router.post('/updatestaff/:id', VerifyToken, AuthorizedRoles("admin", "staff"),  async (req, res) => {
   const { id } = req.params;
   const updateData = req.body;
   
@@ -116,7 +115,7 @@ router.post('/updatestaff/:id', async (req, res) => {
 
 
 // DELETE route to delete a staff by Id
-router.post('/deletestaff', async (req, res) => {
+router.post('/deletestaff', VerifyToken, AuthorizedRoles("admin"), async (req, res) => {
   try {
     const {id} = req.body;
     console.log(id)
@@ -137,7 +136,7 @@ router.post('/deletestaff', async (req, res) => {
 
 
 // find Total number of staff and active staff
-router.get('/staffstats', async (req, res) => {
+router.get('/staffstats',  VerifyToken, AuthorizedRoles("admin" , "staff" ), async (req, res) => {
   try {
     const totalstaff = await Staff.countDocuments({});
     const activestaff = await Staff.countDocuments({ 'status': true });
@@ -193,7 +192,7 @@ router.post('/login', async (req, res) => {
 
 
 // set Doctor status inactive after logout
-router.post('/logout', async (req, res) => {
+router.post('/logout', VerifyToken, AuthorizedRoles("staff"), async (req, res) => {
   const { id } = req.body;
   try {
     await Staff.updateOne({ 'id' : id }, { 'status': false });

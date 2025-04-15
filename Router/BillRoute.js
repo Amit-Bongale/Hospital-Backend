@@ -6,7 +6,7 @@ const VerifyToken = require('../Middleware/VerifyToken')
 const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
 
 // get all bills
-router.post('/allbills', async (req, res) => {
+router.post('/allbills', VerifyToken, AuthorizedRoles("admin","staff"), async (req, res) => {
   try {
     const patient = await Bill.find(); // Fetch all patient from the collection
     res.status(200).json(patient);
@@ -18,7 +18,7 @@ router.post('/allbills', async (req, res) => {
 });
 
 
-router.post('/bills', async (req, res) => {
+router.post('/bills', VerifyToken, AuthorizedRoles("admin", "staff"), async (req, res) => {
   try {
     const patient = await Bill.find({'status' : "not paid"}); // Fetch all patient from the collection
     res.status(200).json(patient);
@@ -31,7 +31,7 @@ router.post('/bills', async (req, res) => {
 
 
 // Find Bill of a single patient
-router.post('/findbill/:id', async (req, res) => {
+router.post('/findbill/:id', VerifyToken, AuthorizedRoles("admin" , "staff", "patient"), async (req, res) => {
   const { id } = req.params;
   console.log(" bill for patient ID:" , id)
   
@@ -56,7 +56,7 @@ router.post('/findbill/:id', async (req, res) => {
 
 
 // set Doctor status inactive after logout
-router.post('/paid', async (req, res) => {
+router.post('/paid', VerifyToken, AuthorizedRoles("admin", "staff"), async (req, res) => {
   const { billno } = req.body;
   try {
     await Bill.updateOne({ 'billno' : billno }, { 'status': 'paid' });
@@ -101,7 +101,7 @@ const calculateRevenueForRange = async (startDate, endDate) => {
 
 
 // Route to get revenue for current day, month, and year
-router.get('/revenue', async (req, res) => {
+router.get('/revenue', VerifyToken, AuthorizedRoles("admin"), async (req, res) => {
   
   try {
     // Get the current date

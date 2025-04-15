@@ -7,7 +7,7 @@ const VerifyToken = require('../Middleware/VerifyToken')
 const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
 
 // Create new medical history record
-router.post("/createmedicalhistory", async (req, res) => {
+router.post("/createmedicalhistory", VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
     try {
         const { patientid, doctorid, doctorname, disease, prescription, appointmenttype } = req.body;
         console.log(req.body)
@@ -30,7 +30,7 @@ router.post("/createmedicalhistory", async (req, res) => {
 });
 
 // Fetch all medical history of a single patient
-router.post('/patientmedicalhistory/:id', async (req, res) => {
+router.post('/patientmedicalhistory/:id', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff", "patient"), async (req, res) => {
     const { id } = req.params;
     try {
         const medicalHistory = await Medicalhistory.find({ patientid: id }).sort({date : -1});
@@ -46,7 +46,7 @@ router.post('/patientmedicalhistory/:id', async (req, res) => {
 });
 
 // Fetch last 3 medical history of a single patient
-router.post('/patientmedicalhistory/latest/:id', async (req, res) => {
+router.post('/patientmedicalhistory/latest/:id', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff", "patient"), async (req, res) => {
     const { id } = req.params;
     try {
         const medicalHistory = await Medicalhistory.find({ patientid: id }).sort({date : -1}).limit(3);
@@ -63,7 +63,7 @@ router.post('/patientmedicalhistory/latest/:id', async (req, res) => {
 
 
 // Fetch last  medical history / for Prescription
-router.post('/prescription/:id', async (req, res) => {
+router.post('/prescription/:id', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff", "patient"), async (req, res) => {
     const { id } = req.params;
     try {
         const medicalHistory = await Medicalhistory.find({ patientid: id }).sort({date : -1}).limit(1);

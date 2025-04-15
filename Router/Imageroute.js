@@ -8,7 +8,7 @@ const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
 const uploadImage = require('../Config/Cloudinaryconfig')
 
 
-router.post('/upload' , async (req,res) => {
+router.post('/upload' , VerifyToken, AuthorizedRoles("admin"), async (req,res) => {
 
     console.log("data hit")
     console.log('Body:', req.body);

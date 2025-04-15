@@ -97,7 +97,7 @@ router.post('/createnewuser', async (req, res)=>{
 
 
 // get details all patients
-router.post('/allpatients', VerifyToken, AuthorizedRoles("admin"), async (req, res) => {
+router.post('/allpatients', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
   try {
     const patient = await Patient.find(); // Fetch all patient from the collection
     res.status(200).json(patient);
@@ -111,7 +111,7 @@ router.post('/allpatients', VerifyToken, AuthorizedRoles("admin"), async (req, r
 
 
 // Find details of a single patient
-router.post('/findpatient/:id', async (req, res) => {
+router.post('/findpatient/:id', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff", "patient"), async (req, res) => {
   const { id } = req.params;
   console.log(id)
   
@@ -133,7 +133,7 @@ router.post('/findpatient/:id', async (req, res) => {
 
 
 // Update detaiils of patient with id
-router.post('/updatepatient/:id', async (req, res) => {
+router.post('/updatepatient/:id', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff", "patient"), async (req, res) => {
   const { id } = req.params;
   const updateData = req.body;
   
@@ -168,7 +168,7 @@ router.post('/updatepatient/:id', async (req, res) => {
 
 
 // DELETE route to delete a patient by Id
-router.post('/deletepatient', async (req, res) => {
+router.post('/deletepatient', VerifyToken, AuthorizedRoles("admin", "patient"), async (req, res) => {
   try {
     const {id} = req.body; 
     console.log(id)

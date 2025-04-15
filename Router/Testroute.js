@@ -6,7 +6,7 @@ const Bill = require('../Models/Billinfo')
 const VerifyToken = require('../Middleware/VerifyToken')
 const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
 
-router.post("/create" , async (req, res) => {
+router.post("/create" , VerifyToken, AuthorizedRoles("doctor", "staff"), async (req, res) => {
 
   try {
     const {patientid , patientname , doctorid , staffid , testname , result , status, } = req.body;
@@ -31,7 +31,7 @@ router.post("/create" , async (req, res) => {
 
 
 
-router.post('/testdetails', async (req, res) => {
+router.post('/testdetails', VerifyToken, AuthorizedRoles("admin", "doctor", "staff"), async (req, res) => {
   try {
     const test = await Test.find({ status: { $ne: "Completed" } }); // Fetch test details which not not completed
     res.status(200).json(test);
@@ -43,7 +43,7 @@ router.post('/testdetails', async (req, res) => {
 });
 
 // Find details of a single patient
-router.post('/patienttestdetail/:id', async (req, res) => {
+router.post('/patienttestdetail/:id', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff", "patient"), async (req, res) => {
   const { id } = req.params;
   console.log(id)
   
@@ -64,7 +64,7 @@ router.post('/patienttestdetail/:id', async (req, res) => {
 
 
 // Update detaiils of patient with id
-router.post('/updatetest/:id', async (req, res) => {
+router.post('/updatetest/:id', VerifyToken, AuthorizedRoles("doctor", "staff"), async (req, res) => {
   const { id } = req.params;
   console.log(id)
   const updateData = req.body;
@@ -103,7 +103,7 @@ router.post('/updatetest/:id', async (req, res) => {
 
 
 // DELETE route to delete a test by ObjectId
-router.post('/deletetest', async (req, res) => {
+router.post('/deletetest', VerifyToken, AuthorizedRoles("doctor", "staff"), async (req, res) => {
   try {
     const {id} = req.body; // Assuming the _id is sent as a URL parameter
     console.log(id)
@@ -123,7 +123,7 @@ router.post('/deletetest', async (req, res) => {
 
 
 // Find details of a single patients test details
-router.post('/findtest/:id', async (req, res) => {
+router.post('/findtest/:id', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff", "patient"), async (req, res) => {
   const { id } = req.params;
   console.log(id)
   
@@ -146,7 +146,7 @@ router.post('/findtest/:id', async (req, res) => {
 
 
 // Fetch last test of patient
-router.post('/last/:id', async (req, res) => {
+router.post('/last/:id', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff", "patient"), async (req, res) => {
   const { id } = req.params;
   try {
     const test = await Test.find({ 'patientid': id }).sort({date : -1}).limit(1);

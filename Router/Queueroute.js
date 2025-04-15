@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken')
 const VerifyToken = require('../Middleware/VerifyToken')
 const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
 
-router.post("/createqueue" , async (req, res) => {
+router.post("/createqueue" , VerifyToken, AuthorizedRoles("admin" , "doctor", "staff", "patient"), async (req, res) => {
     try {
         const {id , name , gender , disease , mobileno , type, status, doctorid } = req.body;
         console.log(req.body)
@@ -38,7 +38,7 @@ router.post("/createqueue" , async (req, res) => {
 
 
 //TO GET ALL PATIENT IN QUEUE 
-router.post('/allpatient', async (req, res) => {
+router.post('/allpatient', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
     try {
         const endOfDay = new Date();
         endOfDay.setHours(23, 59, 59, 999); // Set time to today's 11:59:59 PM
@@ -56,7 +56,7 @@ router.post('/allpatient', async (req, res) => {
 
 
 //TO GET ALL PATIENT IN QUEUE for assigned doctor
-router.post('/allpatient/:doctorid', async (req, res) => {
+router.post('/allpatient/:doctorid', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
     try {
         let {doctorid} = req.params;
         const queue = await Queue.find({'doctorid' : doctorid}); // Fetch all patients assigned to doctors from the queue
@@ -69,7 +69,7 @@ router.post('/allpatient/:doctorid', async (req, res) => {
 
 
 
-router.post('/deletepatient', async (req, res) => {
+router.post('/deletepatient', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
     try {
       const {id} = req.body; // Assuming the _id is sent as a URL parameter
       console.log(id)
@@ -89,8 +89,8 @@ router.post('/deletepatient', async (req, res) => {
 
 
 
-// find Total number of doctors and active doctors
-router.get('/active', async (req, res) => {
+// find Total number of active patienets in queue
+router.get('/active', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff", "patient"), async (req, res) => {
     try {
       const activepatients = await Queue.countDocuments({});
       res.status(200).json(activepatients);

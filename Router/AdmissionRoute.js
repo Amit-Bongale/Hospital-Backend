@@ -5,7 +5,7 @@ const Admission = require('../Models/Admissioninfo')
 const VerifyToken = require('../Middleware/VerifyToken')
 const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
 
-router.post("/createadmission" , async (req, res) => {
+router.post("/createadmission" , VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
 
   try {
     const {patientid , patientname , doctorid , staffid , wardno , wardtype , bedno ,  admissiondateandtime , dischargedateandtime , reason } = req.body;
@@ -33,7 +33,7 @@ router.post("/createadmission" , async (req, res) => {
 })
 
 
-router.post('/admissiondetails', async (req, res) => {
+router.post('/admissiondetails', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
     try {
       const admission = await Admission.find(); // Fetch test details from the collection
       res.status(200).json(admission);
@@ -69,7 +69,7 @@ router.post('/patientadmissiondetail/:id', async (req, res) => {
 
 
 // Update detaiils of patient with id
-router.post('/updateadmission/:id', async (req, res) => {
+router.post('/updateadmission/:id', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
   const { id } = req.params;
   console.log(id)
   const updateData = req.body;
@@ -99,10 +99,10 @@ router.post('/updateadmission/:id', async (req, res) => {
 });
 
   
-// DELETE route to delete a test by ObjectId
-router.post('/deleteadmission', async (req, res) => {
+// DELETE route to delete a admission by ObjectId
+router.post('/deleteadmission', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
   try {
-    const {id} = req.body; // Assuming the _id is sent as a URL parameter
+    const {id} = req.body; // Assuming the id is sent as a URL parameter
     console.log(id)
     // Deleting a admission by ObjectId
     const admit = await Admission.findOneAndDelete({ 'id' : id});

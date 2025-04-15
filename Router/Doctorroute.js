@@ -10,7 +10,7 @@ const VerifyToken = require('../Middleware/VerifyToken')
 const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
 
 // insert doctors
-router.post('/createdoctor', async (req, res)=>{
+router.post('/createdoctor', VerifyToken, AuthorizedRoles("admin"), async (req, res)=>{
     
   try {
     const { id, name, gender, email, password, specialization, phone, experience, dob , image} = req.body;
@@ -89,7 +89,7 @@ router.post('/finddoctor/:id', async (req, res) => {
 
 
 // Update Route
-router.post('/updatedoctor/:id', async (req, res) => {
+router.post('/updatedoctor/:id', VerifyToken, AuthorizedRoles("admin" , "doctor"), async (req, res) => {
   const { id } = req.params;
   const updateData = req.body;
   
@@ -122,7 +122,7 @@ router.post('/updatedoctor/:id', async (req, res) => {
 
 
 // DELETE route to delete a doctor by ObjectId
-router.post('/deletedoctor', async (req, res) => {
+router.post('/deletedoctor',VerifyToken, AuthorizedRoles("admin"), async (req, res) => {
   try {
     const {id} = req.body; // Assuming the _id is sent as a URL parameter
     console.log(id)
@@ -142,7 +142,7 @@ router.post('/deletedoctor', async (req, res) => {
 
 
 // find Total number of doctors and active doctors
-router.get('/doctorstats', async (req, res) => {
+router.get('/doctorstats', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff", "patient"), async (req, res) => {
   try {
     const totalDoctors = await Doctor.countDocuments({});
     const activeDoctors = await Doctor.countDocuments({ 'status': true });
@@ -194,7 +194,7 @@ router.post('/login', async (req, res) => {
 
 
 // set Doctor status inactive after logout
-router.post('/logout', async (req, res) => {
+router.post('/logout', VerifyToken, AuthorizedRoles("doctor"), async (req, res) => {
   const { id } = req.body;
   try {
     await Doctor.updateOne({ 'id' : id }, { 'status': false });
@@ -206,7 +206,7 @@ router.post('/logout', async (req, res) => {
   }
 });
 
-router.post('/doctordetailsqueue', async (req, res) => {
+router.post('/doctordetailsqueue',  VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
   try {
     const doctorsWithQueueCount = await Doctorinfoschema.aggregate([
       {

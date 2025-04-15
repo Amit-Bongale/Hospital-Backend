@@ -9,7 +9,7 @@ const VerifyToken = require('../Middleware/VerifyToken')
 const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
 
 
-router.post('/create' , async (req, res) => {
+router.post('/create' , VerifyToken, AuthorizedRoles("admin"), async (req, res) => {
     try {
         const { id, name, email, password, phone, address} = req.body;
         console.log(req.body)
@@ -74,7 +74,7 @@ router.post('/login', async (req, res) => {
 
 
 // set Doctor status inactive after logout
-router.post('/logout', async (req, res) => {
+router.post('/logout', VerifyToken, AuthorizedRoles("admin"), async (req, res) => {
     const { id } = req.body;
     try {
         await Admin.updateOne({ 'id' : id }, { 'status': false });

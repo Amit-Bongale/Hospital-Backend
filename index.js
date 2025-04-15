@@ -46,7 +46,6 @@ app.listen(port, () => {
 
 // Routes
 
-const Authentication = require("./Router/Authentication.js");
 const Adminroute = require("./Router/Adminroute.js");
 const Doctorroute = require("./Router/Doctorroute.js");
 const Patientroute = require("./Router/Patientroute.js");
@@ -62,7 +61,6 @@ const Billroute = require("./Router/BillRoute.js");
 const Wardroute = require("./Router/WardRoute.js");
 
 
-app.use("/auth", Authentication);
 app.use("/admin", Adminroute);
 app.use("/doctor", Doctorroute);
 app.use("/patient", Patientroute);

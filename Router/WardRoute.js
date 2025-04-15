@@ -7,41 +7,41 @@ const VerifyToken = require('../Middleware/VerifyToken')
 const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
 
 // find Total number of wards and active doctors
-router.get('/wardstatus', async (req, res) => {
-    try {
-        const totalrooms = await Ward.countDocuments({});
-        const usedrooms = await Ward.countDocuments({ 'status': true });
-        res.status(200).json({ totalrooms, usedrooms });
-    } catch (error) {
-        console.error("Error fetching doctor statistics:", error);
-        res.status(500).json({ message: 'Error fetching doctor statistics', error: error.message });
-    }
+router.get('/wardstatus', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
+  try {
+    const totalrooms = await Ward.countDocuments({});
+    const usedrooms = await Ward.countDocuments({ 'status': true });
+    res.status(200).json({ totalrooms, usedrooms });
+  } catch (error) {
+    console.error("Error fetching doctor statistics:", error);
+    res.status(500).json({ message: 'Error fetching doctor statistics', error: error.message });
+  }
 });
 
 router.post('/create' , async (req, res) => {
-    try {
-        const { wardnumber ,  type , bednumber } = req.body;
-        console.log(req.body)
+  try {
+    const { wardnumber ,  type , bednumber } = req.body;
+    console.log(req.body)
 
-        const ward = await Ward.create({
-            'wardnumber' : wardnumber,
-            'type' : type,
-            'bednumber' : bednumber,
-        });
+    const ward = await Ward.create({
+      'wardnumber' : wardnumber,
+      'type' : type,
+      'bednumber' : bednumber,
+    });
 
-        res.status(200).json({ message: 'ward inserted successfully', ward });
-        console.log(ward)
-            
-    } catch (error) {
-        console.error("Insertion Error:", error);
-        res.status(500).json({ message: 'Error inserting ward Info', error: error.message });
-        console.log(error)
-    }
+    res.status(200).json({ message: 'ward inserted successfully', ward });
+    console.log(ward)
+          
+  } catch (error) {
+    console.error("Insertion Error:", error);
+    res.status(500).json({ message: 'Error inserting ward Info', error: error.message });
+    console.log(error)
+  }
 })
 
 
 // get all ward info
-router.post('/details', async (req, res) => {
+router.post('/details', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
     try {
       const ward = await Ward.find(); 
       res.status(200).json(ward); 
@@ -54,7 +54,7 @@ router.post('/details', async (req, res) => {
 
 
 // Find details of a single ward
-router.post('/findward/:id', async (req, res) => {
+router.post('/findward/:id', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
     const { id } = req.params;
     console.log(id)
     
@@ -77,7 +77,7 @@ router.post('/findward/:id', async (req, res) => {
 
 
 // Update detaiils of ward with id
-router.post('/updateward/:id', async (req, res) => {
+router.post('/updateward/:id', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
     const { id } = req.params;
     const updateData = req.body;
     
@@ -108,7 +108,7 @@ router.post('/updateward/:id', async (req, res) => {
 
 
 // DELETE route to delete a ward by Id
-router.post('/deleteward', async (req, res) => {
+router.post('/deleteward', VerifyToken, AuthorizedRoles("admin", "doctor"), async (req, res) => {
   try {
     const {id} = req.body; 
     console.log(id)
@@ -129,7 +129,7 @@ router.post('/deleteward', async (req, res) => {
 });
 
 // find Total number of wards and occupied Beds
-router.get('/wardstats', async (req, res) => {
+router.get('/wardstats', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
   try {
     const totalbeds = await Ward.countDocuments({});
     const activebeds = await Ward.countDocuments({ 'status': "unoccupied" });

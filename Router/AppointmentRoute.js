@@ -10,7 +10,7 @@ const {sendAppointmentApprovalEmail , sendAppointmentRejectionEmail} = require('
 const VerifyToken = require('../Middleware/VerifyToken')
 const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
 
-router.post("/createappointment", async (req, res) => {
+router.post("/createappointment",VerifyToken, AuthorizedRoles("admin" , "doctor", "staff", "patient"), async (req, res) => {
   try {
     const { doctorid,doctorname,  doctorspecialization, patientid, scheduleddate, scheduledtime, type, disease } = req.body;
     console.log(req.body);
@@ -44,7 +44,7 @@ router.post("/createappointment", async (req, res) => {
 });
 
 // get all Pending appointments
-router.post("/allappointment", async (req, res) => {
+router.post("/allappointment", VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
   try {
     const appointment = await Appointment.find({ 'status' : "Pending" });
     res.status(200).json(appointment);
@@ -59,7 +59,7 @@ router.post("/allappointment", async (req, res) => {
 });
 
 // get all appointment of a perticular patient
-router.post("/details/:patientId", async (req, res) => {
+router.post("/details/:patientId", VerifyToken, AuthorizedRoles("admin" , "doctor", "staff", "patient"), async (req, res) => {
   const { patientId } = req.params;
 
   try {
@@ -80,7 +80,7 @@ router.post("/details/:patientId", async (req, res) => {
 });
 
 // DELETE route to Cancel a Appointment by Id
-router.post("/cancelappointment", async (req, res) => {
+router.post("/cancelappointment", VerifyToken, AuthorizedRoles("admin" , "doctor", "staff", "patient"), async (req, res) => {
   try {
     const { id } = req.body;
     console.log(id);
@@ -103,7 +103,7 @@ router.post("/cancelappointment", async (req, res) => {
 
 
 // Update appointment status to approved and add to queue
-router.post("/approve/:id", async (req, res) => {
+router.post("/approve/:id", VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
   try {
     const {id} = req.params;
     const appointment = await Appointment.findOneAndUpdate(
@@ -148,7 +148,7 @@ router.post("/approve/:id", async (req, res) => {
 });
 
 // Update appointment status to rejected
-router.post("/reject/:id", async (req, res) => {
+router.post("/reject/:id", VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
   try {
     const { id } = req.params;
     const appointment = await Appointment.findOneAndUpdate(
