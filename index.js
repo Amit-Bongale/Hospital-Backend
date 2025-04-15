@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const cookieParser = require('cookie-parser');
+
 
 const env = require("dotenv");
 env.config();
@@ -10,6 +12,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 // enable cors for deployed site
 const allowedOrigins = [
@@ -43,6 +46,7 @@ app.listen(port, () => {
 
 // Routes
 
+const Authentication = require("./Router/Authentication.js");
 const Adminroute = require("./Router/Adminroute.js");
 const Doctorroute = require("./Router/Doctorroute.js");
 const Patientroute = require("./Router/Patientroute.js");
@@ -58,7 +62,7 @@ const Billroute = require("./Router/BillRoute.js");
 const Wardroute = require("./Router/WardRoute.js");
 
 
-
+app.use("/auth", Authentication);
 app.use("/admin", Adminroute);
 app.use("/doctor", Doctorroute);
 app.use("/patient", Patientroute);
@@ -72,3 +76,4 @@ app.use("/admission", Admissionroute);
 app.use("/medicalhistory", Medicalhistoryroute);
 app.use("/bill", Billroute);
 app.use("/ward", Wardroute);
+

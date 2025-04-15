@@ -4,7 +4,11 @@ const Appointment = require("../Models/Appointment");
 const Queue = require("../Models/Queueinfo");
 const Bill = require("../Models/Billinfo");
 const Patient = require("../Models/Patientinfo");
+
 const {sendAppointmentApprovalEmail , sendAppointmentRejectionEmail} = require('../Utility/Sendmail')
+
+const VerifyToken = require('../Middleware/VerifyToken')
+const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
 
 router.post("/createappointment", async (req, res) => {
   try {

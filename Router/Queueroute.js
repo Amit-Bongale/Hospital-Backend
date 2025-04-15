@@ -3,6 +3,10 @@ const router = express.Router()
 const Queue = require('../Models/Queueinfo')
 const Bill = require('../Models/Billinfo')
 
+const jwt = require('jsonwebtoken')
+const VerifyToken = require('../Middleware/VerifyToken')
+const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
+
 router.post("/createqueue" , async (req, res) => {
     try {
         const {id , name , gender , disease , mobileno , type, status, doctorid } = req.body;

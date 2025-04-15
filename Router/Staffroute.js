@@ -3,6 +3,9 @@ const router = express.Router()
 const Staff = require('../Models/Staffinfo')
 const { hashPassword , comparePassword } = require('../Utility/bcrypt')
 
+const jwt = require('jsonwebtoken')
+const VerifyToken = require('../Middleware/VerifyToken')
+const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
 
 // add staff
 router.post('/createstaff', async (req, res)=>{
@@ -171,13 +174,17 @@ router.post('/login', async (req, res) => {
     // update staff status to active
     await Staff.updateOne({ 'id' : id }, { 'status': true });
 
-    // Respond with success message
-    res.status(200).json({ success: true, message: 'Login successful',
-      user: { 
-        id: user.id, 
-        name: user.name,
-      }
-    });
+     // Generate JWT token
+      const token = jwt.sign({ id: user.id , name: user.name, role:"staff"}, process.env.JWT_SECRET, { expiresIn: '24h' });
+      res.cookie("token" , token,  {expire : 24 * 60 * 60 * 1000 }) // 24 hours
+
+      // Respond with success message
+      res.status(200).json({ success: true, message: 'Login successful',
+        user: { 
+          id: user.id, 
+          name: user.name,
+        }
+      });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ success: false, message: 'Server error' });
@@ -190,6 +197,7 @@ router.post('/logout', async (req, res) => {
   const { id } = req.body;
   try {
     await Staff.updateOne({ 'id' : id }, { 'status': false });
+    res.clearCookie("token"); // Clear the cookie
     res.status(200).json({ success: true, message: 'Logged out successfully' });
   } catch (error) {
     console.error("Logout error:", error);

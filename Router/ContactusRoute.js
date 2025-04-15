@@ -2,6 +2,9 @@ const express = require('express')
 const router = express.Router()
 const Contactus = require('../Models/Contactusinfo')
 
+const VerifyToken = require('../Middleware/VerifyToken')
+const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
+
 // Insert new contact request
 router.post('/request' , (req,res) => {
 

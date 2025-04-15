@@ -1,9 +1,12 @@
 const express = require('express')
 const router = express.Router()
-
 const Admin = require('../Models/Admininfo')
 
 const { hashPassword , comparePassword } = require('../Utility/bcrypt')
+
+const jwt = require('jsonwebtoken')
+const VerifyToken = require('../Middleware/VerifyToken')
+const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
 
 
 router.post('/create' , async (req, res) => {
@@ -41,17 +44,19 @@ router.post('/login', async (req, res) => {
         if (!user) {
             return res.status(404).json({ success: false, message: 'Account Does not Exist' });
         }
-        console.log(user)
 
         // Check if the password matches
         const isMatch = await comparePassword( password, user.password );
         if (!isMatch) {
-            return res.status(401).send({ error: 'Invalid password.' });
+            return res.status(401).send({ error: 'Invalid password' });
         }
-        console.log(isMatch);
 
         // update staff status to active
         await Admin.updateOne({ 'id' : id }, { 'status': true });
+
+        // Generate JWT token
+        const token = jwt.sign({ id: user.id , name: user.name, role:"admin"}, process.env.JWT_SECRET, { expiresIn: '24h' });
+        res.cookie("token" , token)
 
         // Respond with success message
         res.status(200).json({ success: true, message: 'Login successful',
@@ -67,11 +72,13 @@ router.post('/login', async (req, res) => {
 });
 
 
+
 // set Doctor status inactive after logout
 router.post('/logout', async (req, res) => {
     const { id } = req.body;
     try {
         await Admin.updateOne({ 'id' : id }, { 'status': false });
+        res.clearCookie("token"); // Clear the cookie
         res.status(200).json({ success: true, message: 'Logged out successfully' });
     } catch (error) {
         console.error("Logout error:", error);

@@ -2,6 +2,10 @@ const express = require('express')
 const router = express.Router()
 const Salary = require('../Models/Salaryinfo');
 
+const jwt = require('jsonwebtoken')
+const VerifyToken = require('../Middleware/VerifyToken')
+const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
+
 router.post('/addsalary' , async (req , res) => {
   try {
     const { employeeId, employeeType, salaryAmount, paymentStatus, paymentMonth } = req.body;

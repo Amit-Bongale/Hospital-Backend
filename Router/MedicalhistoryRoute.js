@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Medicalhistory = require('../Models/Medicalhistoryinfo');
 
+const jwt = require('jsonwebtoken')
+const VerifyToken = require('../Middleware/VerifyToken')
+const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
+
 // Create new medical history record
 router.post("/createmedicalhistory", async (req, res) => {
     try {

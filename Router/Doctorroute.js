@@ -5,6 +5,10 @@ const Doctorinfoschema = require('../Models/Doctorinfo')
 const { hashPassword , comparePassword } = require('../Utility/bcrypt')
 const Queue = require('../Models/Queueinfo')
 
+const jwt = require('jsonwebtoken')
+const VerifyToken = require('../Middleware/VerifyToken')
+const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
+
 // insert doctors
 router.post('/createdoctor', async (req, res)=>{
     
@@ -171,6 +175,10 @@ router.post('/login', async (req, res) => {
 
     await Doctor.updateOne({ 'id' : id }, { 'status': true });
 
+    // Generate JWT token
+    const token = jwt.sign({ id: user.id , name: user.name, role:"doctor"}, process.env.JWT_SECRET, { expiresIn: '24h' });
+    res.cookie("token" , token , {expire : 24 * 60 * 60 * 1000 }) // 24 hours
+
     // Respond with success message
     res.status(200).json({ success: true, message: 'Login successful',
       user: { 
@@ -190,8 +198,8 @@ router.post('/logout', async (req, res) => {
   const { id } = req.body;
   try {
     await Doctor.updateOne({ 'id' : id }, { 'status': false });
+    res.clearCookie('token'); // Clear the cookie
     res.status(200).json({ success: true, message: 'Logged out successfully' });
-  
   } catch (error) {
     console.error("Logout error:", error);
     res.status(500).json({ success: false, message: 'Server error' });

@@ -3,6 +3,10 @@ const router = express.Router()
 const Patient = require('../Models/Patientinfo')
 const { hashPassword , comparePassword } = require('../Utility/bcrypt')
 
+const jwt = require('jsonwebtoken')
+const VerifyToken = require('../Middleware/verifyToken')
+const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
+
 const { sendWelcomeMessage } = require('../Utility/Messager')
 const {sendWelcomeEmail} = require('../Utility/Sendmail')
 
@@ -93,7 +97,7 @@ router.post('/createnewuser', async (req, res)=>{
 
 
 // get details all patients
-router.post('/allpatients', async (req, res) => {
+router.post('/allpatients', VerifyToken, AuthorizedRoles("admin"), async (req, res) => {
   try {
     const patient = await Patient.find(); // Fetch all patient from the collection
     res.status(200).json(patient);
@@ -202,7 +206,11 @@ router.post('/login', async (req, res) => {
     if (!isMatch) {
       return res.status(401).send({ error: 'Invalid password.' });
     }
-    console.log(isMatch)
+  
+    // Generate JWT token
+    const token = jwt.sign({ id: user.id , name: user.name, role:"patient"}, process.env.JWT_SECRET, { expiresIn: '24h' });
+    res.cookie("token" , token , {expire : 24 * 60 * 60 * 1000 }) // 24 hours
+
 
     // Respond with success message
     res.status(200).json({ success: true, message: 'Login successful',
@@ -212,7 +220,6 @@ router.post('/login', async (req, res) => {
         // You can include other user details as needed
       }
     });
-    
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ success: false, message: 'Server error' });

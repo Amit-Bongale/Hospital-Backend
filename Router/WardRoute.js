@@ -2,6 +2,10 @@ const express = require('express')
 const router = express.Router()
 const Ward = require('../Models/Wardsinfo')
 
+const jwt = require('jsonwebtoken')
+const VerifyToken = require('../Middleware/VerifyToken')
+const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
+
 // find Total number of wards and active doctors
 router.get('/wardstatus', async (req, res) => {
     try {
