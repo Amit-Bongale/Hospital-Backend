@@ -3,6 +3,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const cookieParser = require('cookie-parser');
 
+const { createServer } = require("http");
+const { Server } = require("socket.io");
 
 const env = require("dotenv");
 env.config();
@@ -10,9 +12,10 @@ env.config();
 const port = process.env.PORT || 3000;
 const app = express();
 
-app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+
+const server = createServer(app);
 
 // enable cors for deployed site
 const allowedOrigins = [
@@ -21,27 +24,49 @@ const allowedOrigins = [
     "http://localhost:3001" // Add local frontend for testing
 ];
 
-app.use(
-    cors({
-      origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-          callback(null, true);
-        } else {
-          callback(new Error("Not allowed by CORS"));
-        }
-      },
-      credentials: true, // Allow cookies/auth headers
-    })
-  );
+// app.use(
+//   cors({
+//     origin: function (origin, callback) {
+//       if (!origin || allowedOrigins.includes(origin)) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error("Not allowed by CORS"));
+//       }
+//     },
+//     credentials: true, // Allow cookies/auth headers
+//   })
+// );
 
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
 
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
+
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ["GET", "POST"]
+  }
+});
+global.io = io;
+
+// db connection
 mongoose.connect(process.env.DBCONNECTION)
 .then(() => console.log("Connected to Database"))
 .catch((e) => console.log("Error connecting to db", e));
-
-app.listen(port, () => {
-  console.log("Server is Running on port 3000");
-});
 
 
 // Routes
@@ -74,3 +99,37 @@ app.use("/admission", Admissionroute);
 app.use("/medicalhistory", Medicalhistoryroute);
 app.use("/bill", Billroute);
 app.use("/ward", Wardroute);
+
+
+
+io.on('connection', (socket) => {
+  console.log('User connected:', socket.id);
+
+  //join room based on id for scoped messages
+  socket.on('joinRoom', ({ role, id }) => {
+    if (role === 'doctor') socket.join(`doctor_${id}`);
+    if (role === 'staff') socket.join('staff');
+    if (role === 'admin') socket.join('admin');
+    if (role === 'patient') socket.join(`patient_${id}`);
+  });
+
+  socket.on("logout", ({ role, id }) => {
+    if (role === "staff") {
+      socket.leave("staff");
+    } else if (role === "admin") {
+      socket.leave("admin");
+    } else {
+      socket.leave(`${role}_${id}`);
+    }
+    console.log(`${role} ${id} logged out and left room(s)`);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+  });
+});
+
+
+server.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});

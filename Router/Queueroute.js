@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const {io} = require('../Server/Server')
 const Queue = require('../Models/Queueinfo')
 const Bill = require('../Models/Billinfo')
 
@@ -7,7 +8,7 @@ const jwt = require('jsonwebtoken')
 const VerifyToken = require('../Middleware/VerifyToken')
 const AuthorizedRoles = require('../Middleware/AuthorizedRoles')
 
-router.post("/createqueue" , VerifyToken, AuthorizedRoles("admin" , "doctor", "staff", "patient"), async (req, res) => {
+router.post("/createqueue" , VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
     try {
         const {id , name , gender , disease , mobileno , type, status, doctorid } = req.body;
         console.log(req.body)
@@ -27,6 +28,8 @@ router.post("/createqueue" , VerifyToken, AuthorizedRoles("admin" , "doctor", "s
             'patientid' : id,
             'patientname' : name
         })
+
+        io.to(`doctor_${doctorid}`).emit("newPatientInQueue", queue);
         
         res.status(200).json({message : 'Patient Added To Queue' , queue})
 
@@ -90,7 +93,7 @@ router.post('/deletepatient', VerifyToken, AuthorizedRoles("admin" , "doctor", "
 
 
 // find Total number of active patienets in queue
-router.get('/active', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff", "patient"), async (req, res) => {
+router.get('/active', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
     try {
       const activepatients = await Queue.countDocuments({});
       res.status(200).json(activepatients);
