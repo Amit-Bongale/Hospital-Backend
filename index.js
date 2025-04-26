@@ -3,6 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const cookieParser = require('cookie-parser');
 
+const http = require("http");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 
@@ -15,44 +16,29 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-const server = createServer(app);
-
 // enable cors for deployed site
 const allowedOrigins = [
-    "https://hospital-management-system-x1n5.onrender.com",
-    "https://hospital-managementsystem.vercel.app",  // vercel frontend
-    "http://localhost:3001" // Add local frontend for testing
+  "https://hospital-management-system-x1n5.onrender.com",
+  "https://hospital-managementsystem.vercel.app",  // vercel frontend
+  "http://localhost:3001" // Add local frontend for testing
 ];
 
-// app.use(
-//   cors({
-//     origin: function (origin, callback) {
-//       if (!origin || allowedOrigins.includes(origin)) {
-//         callback(null, true);
-//       } else {
-//         callback(new Error("Not allowed by CORS"));
-//       }
-//     },
-//     credentials: true, // Allow cookies/auth headers
-//   })
-// );
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"],
+};
 
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
+app.use(cors(corsOptions));
 
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-
-  next();
-});
+const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
@@ -86,6 +72,7 @@ const Billroute = require("./Router/BillRoute.js");
 const Wardroute = require("./Router/WardRoute.js");
 
 
+
 app.use("/admin", Adminroute);
 app.use("/doctor", Doctorroute);
 app.use("/patient", Patientroute);
@@ -107,7 +94,10 @@ io.on('connection', (socket) => {
 
   //join room based on id for scoped messages
   socket.on('joinRoom', ({ role, id }) => {
-    if (role === 'doctor') socket.join(`doctor_${id}`);
+    if (role === 'doctor') {
+      socket.join(`doctor_${id}`);
+      console.log(`Doctor ${id} joined room doctor_${id}`);
+    }
     if (role === 'staff') socket.join('staff');
     if (role === 'admin') socket.join('admin');
     if (role === 'patient') socket.join(`patient_${id}`);
@@ -133,3 +123,5 @@ io.on('connection', (socket) => {
 server.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+module.exports = { io };

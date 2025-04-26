@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const {io} = require('../Server/Server')
 const Queue = require('../Models/Queueinfo')
 const Bill = require('../Models/Billinfo')
 
@@ -29,8 +28,7 @@ router.post("/createqueue" , VerifyToken, AuthorizedRoles("admin" , "doctor", "s
             'patientname' : name
         })
 
-        io.to(`doctor_${doctorid}`).emit("newPatientInQueue", queue);
-        
+        global.io.to(`doctor_${doctorid}`).emit("newPatientInQueue", queue);
         res.status(200).json({message : 'Patient Added To Queue' , queue})
 
     } catch (error) {
@@ -63,13 +61,13 @@ router.post('/allpatient/:doctorid', VerifyToken, AuthorizedRoles("admin" , "doc
     try {
         let {doctorid} = req.params;
         const queue = await Queue.find({'doctorid' : doctorid}); // Fetch all patients assigned to doctors from the queue
-        res.status(200).json(queue); 
+        res.status(200).json(queue);
+
     } catch (error) {
         console.error("Error fetching doctors:", error);
         res.status(500).json({ message: 'Error fetching doctors', error: error.message });
     }
 });
-
 
 
 router.post('/deletepatient', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff"), async (req, res) => {
@@ -89,7 +87,6 @@ router.post('/deletepatient', VerifyToken, AuthorizedRoles("admin" , "doctor", "
       console.log(error.message);
     }
 });
-
 
 
 // find Total number of active patienets in queue

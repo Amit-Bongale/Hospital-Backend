@@ -173,17 +173,18 @@ router.post('/login', async (req, res) => {
     // update staff status to active
     await Staff.updateOne({ 'id' : id }, { 'status': true });
 
-     // Generate JWT token
-      const token = jwt.sign({ id: user.id , name: user.name, role:"staff"}, process.env.JWT_SECRET, { expiresIn: '24h' });
-      res.cookie("token" , token,  { httpOnly: true, expire : 24 * 60 * 60 * 1000, sameSite:"none" }) // 24 hours
+    // Generate JWT token
+    const token = jwt.sign({ id: user.id , name: user.name, role:"staff"}, process.env.JWT_SECRET, { expiresIn: '24h' });
+    
+    res.cookie("token" , token,  { httpOnly: true, expire : 24 * 60 * 60 * 1000 }) // 24 hours
 
-      // Respond with success message
-      res.status(200).json({ success: true, message: 'Login successful',
-        user: { 
-          id: user.id, 
-          name: user.name,
-        }
-      });
+    // Respond with success message
+    res.status(200).json({ success: true, message: 'Login successful',
+      user: { 
+        id: user.id,
+        name: user.name,
+      }
+    });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ success: false, message: 'Server error' });

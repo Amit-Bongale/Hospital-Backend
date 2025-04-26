@@ -177,7 +177,8 @@ router.post('/login', async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign({ id: user.id , name: user.name, role:"doctor"}, process.env.JWT_SECRET, { expiresIn: '24h' });
-    res.cookie("token" , token , { httpOnly: true, expire : 24 * 60 * 60 * 1000, sameSite:"none" }) // 24 hours
+
+    res.cookie("token" , token , { httpOnly: true, expire : 24 * 60 * 60 * 1000  }) // 24 hours
 
     // Respond with success message
     res.status(200).json({ success: true, message: 'Login successful',
