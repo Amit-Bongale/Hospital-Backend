@@ -28,6 +28,8 @@ router.post("/createappointment",VerifyToken, AuthorizedRoles("admin" , "doctor"
       consultantfee: "100",
     });
 
+    global.io.to(`staff`).emit("newAppointment", appointment);
+
     res.status(200) .json({
       success: true,
       message: "Appointment Booked Sucessfully successfully",
@@ -49,6 +51,7 @@ router.post("/allappointment", VerifyToken, AuthorizedRoles("admin" , "doctor", 
     const appointment = await Appointment.find({ 'status' : "Pending" });
     res.status(200).json(appointment);
     // console.log(appointment)
+
   } catch (error) {
     console.error("Error fetching appointment:", error);
     res.status(500).json({

@@ -21,6 +21,8 @@ router.post("/create" , VerifyToken, AuthorizedRoles("doctor", "staff"), async (
       'result' : result,
     })
 
+    global.io.to(`staff`).emit("newTest", test);
+
     res.status(200).json({message : 'Test Added' , test})
       
   } catch (error) {
@@ -88,6 +90,8 @@ router.post('/updatetest/:id', VerifyToken, AuthorizedRoles("doctor", "staff"), 
       { 'patientid': updateData.patientid }, // Find the document by patientid
       { $set: { 'fees.testfee': newTestFee } } // Update the testfee
     );
+
+    global.io.to(`doctor_${doctorid}`).emit("Testupdates", updatedtest);
 
     console.log('billfee:', billUpdateResult)
 

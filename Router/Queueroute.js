@@ -23,12 +23,13 @@ router.post("/createqueue" , VerifyToken, AuthorizedRoles("admin" , "doctor", "s
             'doctorid' : doctorid,
         })
 
-        await Bill.create({
+        const bill = await Bill.create({
             'patientid' : id,
             'patientname' : name
         })
 
         global.io.to(`doctor_${doctorid}`).emit("newPatientInQueue", queue);
+        global.io.to(`staff`).emit("newBill", bill);
         res.status(200).json({message : 'Patient Added To Queue' , queue})
 
     } catch (error) {
