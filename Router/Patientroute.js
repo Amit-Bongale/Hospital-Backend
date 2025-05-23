@@ -56,7 +56,7 @@ router.post('/createnewpatient', async (req, res)=>{
 })
 
 
-// create user ( for user to create acc on website)
+// create user ( for user to create account on website)
 router.post('/createnewuser', async (req, res)=>{
   try {
     const { id, name, gender, email, phone, dob, age, address, emergencycontact,  bloodgroup, aadharno, medicalhistory, password } = req.body;
@@ -114,6 +114,10 @@ router.post('/allpatients', VerifyToken, AuthorizedRoles("admin" , "doctor", "st
 router.post('/findpatient/:id', VerifyToken, AuthorizedRoles("admin" , "doctor", "staff", "patient"), async (req, res) => {
   const { id } = req.params;
   console.log(id)
+
+  if(req.user.role === "patient" && req.user.id !== id) {
+    return res.status(403).json({ message: 'unauthorized'});
+  }
   
   try {
     // Find one patient by the  id
