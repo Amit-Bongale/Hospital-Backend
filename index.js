@@ -72,6 +72,9 @@ const Billroute = require("./Router/BillRoute.js");
 const Wardroute = require("./Router/WardRoute.js");
 
 
+const AuthVerify = require("./Middleware/AuthVerify.js");
+
+
 
 app.use("/admin", Adminroute);
 app.use("/doctor", Doctorroute);
@@ -86,6 +89,7 @@ app.use("/admission", Admissionroute);
 app.use("/medicalhistory", Medicalhistoryroute);
 app.use("/bill", Billroute);
 app.use("/ward", Wardroute);
+app.use("/auth", AuthVerify);
 
 
 
