@@ -198,7 +198,6 @@ router.post('/logout', VerifyToken, AuthorizedRoles("staff"), async (req, res) =
   try {
     await Staff.updateOne({ 'id' : id }, { 'status': false });
     res.clearCookie("token"); // Clear the cookie
-    req.session.destroy?.(); 
     res.status(200).json({ success: true, message: 'Logged out successfully' });
   } catch (error) {
     console.error("Logout error:", error);
